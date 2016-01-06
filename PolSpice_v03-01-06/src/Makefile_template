@@ -1,0 +1,52 @@
+#
+# Makefile to customize for your system
+#
+# system variable HEALPIX must be defined for compilation
+#  and at run time
+#
+FC =                  	# F90 compiler
+FCFLAGS =  		# compiler options
+FITSLIB =  		# cfitsio library location (directory)
+SUFF   =		# Healpix f90 include and lib suffix
+HPXINC = $(HEALPIX)/include$(SUFF)  # Healpix f90 include files location
+HPXLIB = $(HEALPIX)/lib$(SUFF)      # Healpix f90 library location
+#
+INC = -I. -I$(HPXINC)
+LIBS = -L$(HPXLIB) -lhealpix -L$(FITSLIB) -lcfitsio
+#
+
+OPARAMS = spice_parameters.o
+OCOMMON = spice_common.o
+OOTHERS = apodize_mod.o \
+	rec3jj.o \
+	cumul2.o \
+	compute_windows.o \
+	do_legendre.o \
+	convert_to_ascii.o \
+	deal_with_filenames.o \
+	deal_with_options.o \
+	deal_with_files.o \
+	deal_with_xi_and_cl.o \
+	remove_dipole_mod.o \
+	spice_subs.o
+
+OBJS = 	$(OPARAMS) $(OCOMMON) $(OOTHERS) 
+
+all:	spice 
+
+spice:	$(OBJS) spice.o
+	$(FC) $(FCFLAGS) $(OBJS) spice.o -o $@ $(LIBS)
+
+clean:
+	rm -f *.o *.d *.mod spice 
+
+.SUFFIXES:
+.SUFFIXES: .F90 .f90 .o 
+.f90.o:
+	$(FC) $(FCFLAGS) $(INC) -c $< -o $@
+.F90.o:
+	$(FC) $(FCFLAGS) $(INC) -c $< -o $@
+
+# dependencies
+$(OCOMMON):$(OPARAMS)
+$(OOTHERS):$(OCOMMON)

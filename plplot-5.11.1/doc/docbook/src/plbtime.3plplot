@@ -1,0 +1,47 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLBTIME 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplbtime\fP - Calculate broken-down time from continuous time for the current stream 
+.SH SYNOPSIS
+\fBplbtime\fP(\fIyear\fP, \fImonth\fP, \fIday\fP, \fIhour\fP, \fImin\fP, \fIsec\fP, \fIctime\fP)
+.SH DESCRIPTION
+
+.P
+Calculate broken-down time;  \fIyear\fP, \fImonth\fP, \fIday\fP, \fIhour\fP, \fImin\fP, \fIsec\fP; from continuous time, \fIctime\fP for the current stream.  This function is the inverse of \fBplctime\fP(3plplot). 
+.P
+The PLplot definition of broken-down time is a calendar time that completely ignores all time zone offsets, i.e., it is the user's responsibility to apply those offsets (if so desired) before using the PLplot time API.  By default broken-down time is defined using the proleptic Gregorian calendar without the insertion of leap seconds and continuous time is defined as the number of seconds since the Unix epoch of 1970-01-01T00:00:00Z. However, other definitions of broken-down and continuous time are possible, see \fBplconfigtime\fP(3plplot). 
+.P
+Redacted form:  General: \fBplbtime(year, month, day, hour, min, sec, ctime)\fP
+Perl/PDL: Not available? 
+
+.P
+This function is used in example 29. 
+.SH ARGUMENTS
+.TP
+\fIyear\fP (PLINT *, output) 
+Output year. 
+.TP
+\fImonth\fP (PLINT *, output) 
+Output month in range from 0 (January) to 11 (December). 
+.TP
+\fIday\fP (PLINT *, output) 
+Output day in range from 1 to 31. 
+.TP
+\fIhour\fP (PLINT *, output) 
+Output hour in range from 0 to 23. 
+.TP
+\fImin\fP (PLINT *, output) 
+Output minute in range from 0 to 59 
+.TP
+\fIsec\fP (PLFLT *, output) 
+Output second in floating range from 0. to 60. 
+.TP
+\fIctime\fP (PLFLT, input) 
+Continous time from which the broken-down time is calculated. 
+
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

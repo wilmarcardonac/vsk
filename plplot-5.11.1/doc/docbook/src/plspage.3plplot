@@ -1,0 +1,40 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLSPAGE 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplspage\fP - Set page parameters 
+.SH SYNOPSIS
+\fBplspage\fP(\fIxp\fP, \fIyp\fP, \fIxleng\fP, \fIyleng\fP, \fIxoff\fP, \fIyoff\fP)
+.SH DESCRIPTION
+
+.P
+Sets the page configuration (optional).  If an individual parameter is zero then that parameter value is not updated.  Not all parameters are recognized by all drivers and the interpretation is device-dependent. The X-window driver uses the length and offset parameters to determine the window size and location.  The length and offset values are expressed in units that are specific to the current driver. For instance: screen drivers will usually interpret them as number of pixels, whereas printer drivers will usually use mm. This routine, if used, must be called before initializing PLplot. 
+.P
+Redacted form: \fBplspage(xp, yp, xleng, yleng, xoff, yoff)\fP
+.P
+This function is used in examples 14 and 31. 
+.SH ARGUMENTS
+.TP
+\fIxp\fP (PLFLT, input) 
+Number of pixels/inch (DPI), x. 
+.TP
+\fIyp\fP (PLFLT, input) 
+Number of pixels/inch (DPI), y. 
+.TP
+\fIxleng\fP (PLINT , input) 
+Page length, x. 
+.TP
+\fIyleng\fP (PLINT, input) 
+Page length, y. 
+.TP
+\fIxoff\fP (PLINT, input) 
+Page offset, x. 
+.TP
+\fIyoff\fP (PLINT, input) 
+Page offset, y. 
+
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

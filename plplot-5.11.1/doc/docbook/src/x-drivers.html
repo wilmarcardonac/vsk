@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 5. The PLplot Display Driver Family</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="part_programming.html" title="Part II.  Programming"><link rel="prev" href="deploying.html" title="Chapter 4. Deploying programs that use PLplot"><link rel="next" href="tk-driver.html" title="The Tk Driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 5. The PLplot Display Driver Family</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="deploying.html">Prev</a> </td><th width="60%" align="center">Part II.  Programming </th><td width="20%" align="right"> <a accesskey="n" href="tk-driver.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter 5. The PLplot Display Driver Family"><div class="titlepage"><div><div><h2 class="title"><a name="x-drivers"></a>Chapter 5. The PLplot Display Driver Family</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="x-drivers.html#xwin-driver">The Xwin Driver (X-Windows)</a></span></dt><dt><span class="sect1"><a href="tk-driver.html">The Tk Driver</a></span></dt><dt><span class="sect1"><a href="aqt-driver.html">The AquaTerm Driver (Mac OS X)</a></span></dt><dt><span class="sect1"><a href="wxWidgets-driver.html">The wxWidgets Driver (Linux, Mac OS X, Windows)</a></span></dt><dd><dl><dt><span class="sect2"><a href="wxWidgets-driver.html#wxWidgets-driver-basics">wxWidgets Driver Basics</a></span></dt></dl></dd></dl></div><p>
+    Drivers that provide screen displays are described in this chapter.  
+    Each of the drivers has a list of options, and these may be set as 
+    outlined in <a class="xref" href="advanced.html#arguments" title="Command Line Arguments">the section called “Command Line Arguments”</a>.
+  </p><div class="sect1" title="The Xwin Driver (X-Windows)"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xwin-driver"></a>The Xwin Driver (X-Windows)</h2></div></div></div><p> 
+      The Xwin driver draws plots in an X-window.  Although some of the
+      newer features are not supported, it remains the reference driver
+      for PLplot.
+    </p><p>
+      Plots are displayed one page at a time.  The pager is advanced by 
+      pressing the Enter key, and may only be advanced in the forward
+      direction.
+    </p><p>
+      Anti-aliasing is not supported, and the Xwin driver is not 
+      unicode-enabled.
+    </p><p>
+      The available driver options are:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+	  sync: Synchronized X server operation (0|1)
+	</p></li><li class="listitem"><p>
+	  nobuffered: Sets unbuffered operation (0|1)
+	</p></li><li class="listitem"><p>
+	  noinitcolors: Sets cmap0 allocation (0|1)
+	</p></li><li class="listitem"><p>
+	  defvis: Use the Default Visual (0|1)
+	</p></li><li class="listitem"><p>
+	  usepth: Use pthreads (0|1)
+	</p></li></ul></div><p>
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="deploying.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="part_programming.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="tk-driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Chapter 4. Deploying programs that use PLplot </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> The Tk Driver</td></tr></table></div></body></html>

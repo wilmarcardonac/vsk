@@ -1,0 +1,178 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Adding FreeType Library Support to Bitmap Drivers</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="advanced.html" title="Chapter 3. Advanced Use of PLplot"><link rel="prev" href="output-devices.html" title="Output Devices"><link rel="next" href="viewport_window.html" title="View Surfaces, (Sub-)Pages, Viewports and Windows"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Adding FreeType Library Support to Bitmap Drivers</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="output-devices.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Advanced Use of PLplot</th><td width="20%" align="right"> <a accesskey="n" href="viewport_window.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Adding FreeType Library Support to Bitmap Drivers"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="FreeType-notes"></a>Adding FreeType Library Support to Bitmap Drivers</h2></div></div></div><p>Any bitmap driver in the PLplot family should be able to use fonts
+    (TrueType and others) that are rendered by the FreeType library just as long
+    as the device supports setting an individual pixel. Note that drivers
+    interact with FreeType using the support routines 
+    <code class="literal">plD_FreeType_init</code>,
+    <code class="literal">plD_render_freetype_text</code>,
+    <code class="literal">plD_FreeType_Destroy</code>,
+    <code class="literal">pl_set_extended_cmap0</code>, and
+    <code class="literal">pl_RemakeFreeType_text_from_buffer</code> that are coded in
+    <code class="filename">plfreetype.c</code>.</p><p>The use of these support routines is exemplified by the
+    <code class="filename">gd.c</code> driver.  Here we make some notes to accompany
+    this driver which should make it easier to migrate other drivers to
+    use the FreeType library.  Every code fragment we mention below should be surrounded
+    with a <code class="literal">#ifdef PL_HAVE_FREETYPE...#endif</code> to quarantine these
+    fragments for systems without the FreeType library.  For interactive devices that
+    need caching of text drawing, reference should also be made to
+    <code class="filename">wingcc.c</code>.</p><div class="sect2" title="Write a call back function to plot a single pixel"><div class="titlepage"><div><div><h3 class="title"><a name="idp7740672"></a>Write a call back function to plot a single pixel</h3></div></div></div><p>First, write a call back function, of type
+      <code class="literal">plD_pixel_fp</code>, which specifies how a single pixel is set
+      in the current color. This can be of type static void. For example, in the
+      <code class="filename">gd.c</code> driver it looks like this:
+
+      </p><pre class="programlisting">
+	void plD_pixel_gd (PLStream *pls, short x, short y)
+	{
+	png_Dev *dev=(png_Dev *)pls-&gt;dev;
+
+	gdImageSetPixel(dev-&gt;im_out, x, y,dev-&gt;colour);
+	}
+      </pre><p>
+      </p></div><div class="sect2" title="Initialize FreeType"><div class="titlepage"><div><div><h3 class="title"><a name="idp7744000"></a>Initialize FreeType</h3></div></div></div><p>Next, we have to initialize the FreeType library. For the
+      <code class="filename">gd.c</code> driver this is done via two separate functions due
+      to the order that dependent information is initialized in the driver.</p><p>The "level 1" initialization of FreeType does two things: 1) calls
+      <code class="literal">plD_FreeType_init(pls)</code>, which in turn allocates memory to
+      the pls-&gt;FT structure; and 2) stores the location of the call back routine.
+      </p><p>
+	</p><pre class="programlisting">
+	  void init_freetype_lv1 (PLStream *pls)
+	  {
+	  FT_Data *FT;
+
+	  plD_FreeType_init(pls);
+
+	  FT=(FT_Data *)pls-&gt;FT;
+	  FT-&gt;pixel= (plD_pixel_fp)plD_pixel_gd;
+
+	  }
+	</pre><p>
+      </p><p>This initialization routine is called at the end of 
+      <code class="literal">plD_init_png_Dev(PLStream *pls)</code> in the
+      <code class="filename">gd.c</code> driver:</p><p>
+	</p><pre class="programlisting">
+	  if (freetype)
+	  {
+	  pls-&gt;dev_text = 1; /* want to draw text */
+	  init_freetype_lv1(pls);
+	  FT=(FT_Data *)pls-&gt;FT;
+	  FT-&gt;smooth_text=smooth_text;
+	  }
+	</pre><p>
+      </p><p><code class="literal">"freetype"</code> is a local variable which is parsed
+      through <code class="literal">plParseDrvOpts</code> to determine if the user wanted
+      FreeType text. In that case <code class="literal">pls-&gt;dev_text</code> is set to 1 to
+      indicate the driver will be rendering it's own text. After that, we always
+      use <code class="literal">pls-&gt;dev_text</code> to work out if we want FreeType or
+      not.</p><p>Similarly, <code class="literal">"smooth_text"</code> is a local variable passed
+      through <code class="literal">plParseDrvOpts</code> to find out if the user wants
+      smoothing. Since there is nothing in PLStream to track smoothing, we have to
+      set the FT-&gt;smooth_text flag as well at this time.</p><p>The "level 2" initialization function initializes everything else
+      required for using the FreeType library but has to be called after the
+      screen resolution and dpi have been set. Therefore, it is called at the end
+      of <code class="literal">plD_init_png()</code>, where it looks like:
+
+      </p><pre class="programlisting">
+	if (pls-&gt;dev_text)
+	{
+	init_freetype_lv2(pls);
+	}
+      </pre><p>
+      </p><p>The actual function looks like this:
+
+      </p><pre class="programlisting">
+	static void init_freetype_lv2 (PLStream *pls)
+	{
+	png_Dev *dev=(png_Dev *)pls-&gt;dev;
+	FT_Data *FT=(FT_Data *)pls-&gt;FT;
+
+	FT-&gt;scale=dev-&gt;scale;
+	FT-&gt;ymax=dev-&gt;pngy;
+	FT-&gt;invert_y=1;
+
+	if (FT-&gt;smooth_text==1)
+	{
+	FT-&gt;ncol0_org=pls-&gt;ncol0;                                   /* save a copy of the original size of ncol0 */
+	FT-&gt;ncol0_xtra=NCOLOURS-(pls-&gt;ncol1+pls-&gt;ncol0);            /* work out how many free slots we have */
+	FT-&gt;ncol0_width=FT-&gt;ncol0_xtra/(pls-&gt;ncol0-1);              /* find out how many different shades of anti-aliasing we can do */
+	if (FT-&gt;ncol0_width&gt;64) FT-&gt;ncol0_width=64;                 /* set a maximum number of shades */
+	plscmap0n(FT-&gt;ncol0_org+(FT-&gt;ncol0_width*pls-&gt;ncol0));      /* redefine the size of cmap0 */
+	/* the level manipulations are to turn off the plP_state(PLSTATE_CMAP0)
+	* call in plscmap0 which (a) leads to segfaults since the GD image is
+	* not defined at this point and (b) would be inefficient in any case since
+	* setcmap is always called later (see plD_bop_png) to update the driver
+	* color palette to be consistent with cmap0. */
+	{
+	PLINT level_save;
+	level_save = pls-&gt;level;
+	pls-&gt;level = 0;
+	pl_set_extended_cmap0(pls, FT-&gt;ncol0_width, FT-&gt;ncol0_org); /* call the function to add the extra cmap0 entries and calculate stuff */
+	pls-&gt;level = level_save;
+	}
+	}
+
+	}
+      </pre><p>
+      </p><p>FT-&gt;scale is a scaling factor to convert coordinates. This is used by
+      the <code class="filename">gd.c</code> and some other drivers to scale back a larger virtual page and this
+      eliminate the "hidden line removal bug". Set it to 1 if your device driver
+      doesn't use any scaling.</p><p>Some coordinate systems have zero on the bottom, others have zero on
+      the top. FreeType does it one way, and most everything else does it the
+      other. To make sure everything is working OK, we have to "flip" the
+      coordinates, and to do this we need to know how big in the Y dimension the
+      page is, and whether we have to invert the page or leave it alone.</p><p> </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>FT-&gt;ymax specifies the size of the page</p></li><li class="listitem"><p>FT-&gt;invert_y=1 tells us to invert the
+	y-coordinates, FT-&gt;invert_y=0 will not invert the coordinates.
+      </p></li></ul></div><p>We also do some computational gymnastics to "expand" cmap0 if the user
+      wants anti-aliased text.  Basically, you have to work out how many spare
+      colors there are in the driver after cmap0 and cmap1 are done, then set a
+      few variables in FT to let the render know how many colors it's going to
+      have at its disposal, and call plscmap0n to resize cmap0.  The call to
+      <code class="literal">pl_set_extended_cmap0</code> does the remaining part of the
+      work.  Note it essential to protect that call by the
+      <code class="literal">pls-&gt;level</code> manipulations for the reasons stated. </p></div><div class="sect2" title="Add A Command to redraw text (interactive drivers only)"><div class="titlepage"><div><div><h3 class="title"><a name="idp7766192"></a>Add A Command to redraw text (interactive drivers only)</h3></div></div></div><p>Plplot only caches drawing commands, not text plotting commands, so
+      for interactive devices which refresh their display by replaying the plot
+      buffer, a separate function has to be called to redraw the text.  plfreetype
+      knows when buffering is being used by a device driver, and will automatically
+      start caching text when necessary.  To redraw this cached text, a call to
+      <code class="literal">pl_RemakeFreeType_text_from_buffer</code> has to be added after the driver has called
+      <code class="literal">plRemakePlot</code>.  The following example is from <code class="filename">wingcc.c</code>.
+
+      </p><pre class="programlisting">
+	if (dev-&gt;waiting==1)
+	{
+	plRemakePlot(pls);
+	#ifdef PL_HAVE_FREETYPE
+	pl_RemakeFreeType_text_from_buffer(pls);
+	#endif
+	}
+      </pre><p>
+      </p></div><div class="sect2" title="Add Function Prototypes"><div class="titlepage"><div><div><h3 class="title"><a name="idp7770400"></a>Add Function Prototypes</h3></div></div></div><p>Next, to the top of the drivers' source file add the prototype
+      definitions for the functions just written.
+
+      </p><pre class="programlisting">
+	static void plD_pixel_gd (PLStream *pls, short x, short y);
+	static void init_freetype_lv1 (PLStream *pls);
+	static void init_freetype_lv2 (PLStream *pls);
+      </pre><p>
+      </p></div><div class="sect2" title="Add Closing functions"><div class="titlepage"><div><div><h3 class="title"><a name="idp7772496"></a>Add Closing functions</h3></div></div></div><p>Finally, add a <code class="literal">plD_FreeType_Destroy(pls)</code> entry to
+      the device "tidy" function; this command deallocates memory allocated to the
+      FT entry in the stream, closes the FreeType library and any open fonts. It
+      is also a good idea to reset CMAP0 back to it's original size here if
+      anti-aliasing was done. For example, in the <code class="filename">gd.c</code>
+      driver, it looks like this:
+
+      </p><pre class="programlisting">
+	void plD_tidy_png(PLStream *pls)
+	{
+	fclose(pls-&gt;OutFile);
+
+	#ifdef PL_HAVE_FREETYPE
+	FT_Data *FT=(FT_Data *)pls-&gt;FT;
+	plscmap0n(FT-&gt;ncol0_org);
+
+	plD_FreeType_Destroy(pls);
+	#endif
+
+	free_mem(pls-&gt;dev);
+	}
+
+      </pre><p>
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="output-devices.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="advanced.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="viewport_window.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Output Devices </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> View Surfaces, (Sub-)Pages, Viewports and Windows</td></tr></table></div></body></html>

@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 24. Notes for each Operating System that We Support</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="part_reference.html" title="Part IV.  Reference"><link rel="prev" href="plP_getinitdriverlist.html" title="plP_getinitdriverlist: Get the initialized-driver list"><link rel="next" href="windows-notes.html" title="Windows Notes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 24. Notes for each Operating System that We Support</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plP_getinitdriverlist.html">Prev</a> </td><th width="60%" align="center">Part IV.  Reference </th><td width="20%" align="right"> <a accesskey="n" href="windows-notes.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter 24. Notes for each Operating System that We Support"><div class="titlepage"><div><div><h2 class="title"><a name="os-notes"></a>Chapter 24. Notes for each Operating System that We Support</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="os-notes.html#linux-unix-notes">Linux/Unix Notes</a></span></dt><dd><dl><dt><span class="sect2"><a href="os-notes.html#idp25170816">Linux/Unix Configure, Build, and Installation</a></span></dt><dt><span class="sect2"><a href="os-notes.html#idp25242064">Linux/Unix Building of C Programmes that Use the 
+      Installed PLplot Libraries</a></span></dt></dl></dd><dt><span class="sect1"><a href="windows-notes.html">Windows Notes</a></span></dt><dd><dl><dt><span class="sect2"><a href="windows-notes.html#idp25244864">Windows Configure and Build</a></span></dt></dl></dd><dt><span class="sect1"><a href="macosx-notes.html">Mac OS X Notes</a></span></dt><dd><dl><dt><span class="sect2"><a href="macosx-notes.html#idp25251168">Mac OS X Configure and Build</a></span></dt></dl></dd></dl></div><p>
+    The purpose of this Chapter is to present notes for each operating system
+    that we support. Currently, those are all operating systems supported by
+    CMake (all forms of Unix including Linux and Mac OS X, and all forms of
+    Windows including MinGW, MinGW/MSYS, Cygwin, and essentially all Windows
+    variants directly supported by Microsoft).
+  </p><div class="sect1" title="Linux/Unix Notes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="linux-unix-notes"></a>Linux/Unix Notes</h2></div></div></div><div class="sect2" title="Linux/Unix Configure, Build, and Installation"><div class="titlepage"><div><div><h3 class="title"><a name="idp25170816"></a>Linux/Unix Configure, Build, and Installation</h3></div></div></div><p>
+	Here is the short story:
+	</p><pre class="programlisting">
+	  # Note many other cmake options are available besides -DCMAKE_INSTALL_PREFIX
+	  # Inspect CMakeCache.txt after a preliminary cmake run to see an annotated
+	  # list of the available options.  Then remove CMakeCache.txt and try again.
+	  cmake -DCMAKE_INSTALL_PREFIX=&lt;install-prefix&gt; \
+	  &lt;path-to-source-tree&gt; &gt;&amp; cmake.out
+	  make &gt;&amp; make.out
+	  #(optional, requires -DBUILD_TEST=ON option for cmake)
+	  ctest &gt;&amp; ctest.out
+	  make install &gt;&amp; make_install.out
+	  cd &lt;install-prefix&gt;/share/plplot&lt;version&gt;/examples/
+	  make &gt;&amp; make_examples.out
+	  ./plplot-test.sh &gt;&amp; plplot-test.sh.out
+	</pre><p>
+      </p><p>
+	The longer (CMake) story is currently documented <a class="ulink" href="http://sourceforge.net/p/plplot/wiki/Building_PLplot" target="_top">here</a>.
+	The eventual plan is to incorporate that material in this documentation,
+	but we haven't done it yet so this section NEEDS DOCUMENTATION.
+      </p></div><div class="sect2" title="Linux/Unix Building of C Programmes that Use the Installed PLplot Libraries"><div class="titlepage"><div><div><h3 class="title"><a name="idp25242064"></a>Linux/Unix Building of C Programmes that Use the 
+      Installed PLplot Libraries</h3></div></div></div><p> This is incomplete.  For now follow what is done to build
+      our installed examples (see "make &gt;&amp; make_examples.out above) using
+      pkg-config.  NEEDS DOCUMENTATION.
+      </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plP_getinitdriverlist.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="part_reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="windows-notes.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plP_getinitdriverlist</code>: Get the initialized-driver
+      list
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Windows Notes</td></tr></table></div></body></html>

@@ -1,0 +1,54 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLFSURF3D 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplfsurf3d\fP - Plot shaded 3-d surface plot 
+.SH SYNOPSIS
+\fBplfsurf3d\fP(\fIx\fP, \fIy\fP, \fIzops\fP, \fIzp\fP, \fInx\fP, \fIny\fP, \fIopt\fP, \fIclevel\fP, \fInlevel\fP)
+.SH DESCRIPTION
+
+.P
+Plots a three dimensional shaded surface plot within the environment set up by \fBplw3d\fP(3plplot). The surface is defined by the data contained in the 2D const PLFLT * const * matrix or the PLfGrid2 structure \fIzp\fP. How the data in \fIzp\fP is rendered is determined by the \fIzops\fP parameter. \fIzops\fP is a pointer to a function that reads the data out of the grid structure. The following functions in PLplot core will return an appropriate function pointer: plf2ops_c() (use when \fIzp\fP is of type const PLFLT * const *), plf2ops_grid_c() (use when \fIzp\fP is a pointer to a row-major PLfGrid2 structure), plf2ops_grid_row_major() (same as plf2ops_grid_c()?) and plf2ops_grid_col_major() (use when \fIzp\fP is a pointer to a column-major PLfGrid2 structure). \fInx\fP, \fIny\fP\fIopt\fP\fIclevel\fP and \fInlevel\fP are the same as in for example \fBplsurf3d\fP(3plplot). 
+.P
+Redacted form? \fBplfsurf3d(x, y, zops, zp, opt, clevel)\fP
+.P
+This function is used in example 8. 
+.SH ARGUMENTS
+.TP
+\fIx\fP (const PLFLT *, input) 
+Pointer to set of x coordinate values at which the function is evaluated. 
+.TP
+\fIy\fP (const PLFLT *, input) 
+Pointer to set of y coordinate values at which the function is evaluated. 
+.TP
+\fIzops\fP (PLF2OPS, input) 
+Pointer to a function for processing the data contained in zp. 
+.TP
+\fIzp\fP (PLPointer, input) 
+Pointer to the data to be plotted, either as a vectored two-dimensional array with set of function values or as a PLfGrid2 structure. 
+.TP
+\fInx\fP (PLINT, input) 
+Number of \fIx\fP values at which function is evaluated. 
+.TP
+\fIny\fP (PLINT, input) 
+Number of \fIy\fP values at which function is evaluated. 
+.TP
+\fIopt\fP (PLINT, input) 
+Determines the way in which the surface is represented. To specify more than one option just add the options, e.g. FACETED + SURF_CONT \fIopt\fP=FACETED : Network of lines is drawn connecting points at which function is defined. 
+\fIopt\fP=BASE_CONT : A contour plot is drawn at the base XY plane using parameters \fInlevel\fP and \fIclevel\fP. 
+\fIopt\fP=SURF_CONT : A contour plot is drawn at the surface plane using parameters \fInlevel\fP and \fIclevel\fP. 
+\fIopt\fP=DRAW_SIDES : draws a curtain between the base XY plane and the borders of the plotted function. 
+\fIopt\fP=MAG_COLOR : the surface is colored according to the value of Z; if MAG_COLOR is not used, then the default the surface is colored according to the intensity of the reflected light in the surface from a light source whose position is set using \fBpllightsource\fP(3plplot). 
+
+.TP
+\fIclevel\fP (const PLFLT *, input) 
+Pointer to the array that defines the contour level spacing. 
+.TP
+\fInlevel\fP (PLINT, input) 
+Number of elements in the clevel array. 
+
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

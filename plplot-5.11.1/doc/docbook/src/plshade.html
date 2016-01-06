@@ -1,0 +1,156 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plshade: Shade individual region on the basis of value</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plshades.html" title="plshades: Shade regions on the basis of value"><link rel="next" href="plshade1.html" title="plshade1: Shade individual region on the basis of value"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plshade</code>:  Shade individual region on the basis of value
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plshades.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plshade1.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plshade: Shade individual region on the basis of value"><div class="titlepage"><div><div><h4 class="title"><a name="plshade"></a>
+      <code class="function">plshade</code>:  Shade individual region on the basis of value
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+            <b class="fsfunc">plshade</b>
+          (</code></td><td>
+            <var class="pdparam">a</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nx</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ny</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">defined</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">xmin</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">xmax</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ymin</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ymax</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">shade_min</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">shade_max</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">sh_cmap</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">sh_color</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">sh_width</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">min_color</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">min_width</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">max_color</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">max_width</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">fill</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">rectangular</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr_data</var>
+          <code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Shade individual region on the basis of value.  Use <a class="link" href="plshades.html" title="plshades: Shade regions on the basis of value"><code class="function">plshades</code></a> if you want to
+      shade a number of regions using continuous colors.
+      <a class="link" href="plshade.html" title="plshade: Shade individual region on the basis of value"><code class="function">plshade</code></a> is identical to <a class="link" href="plshade1.html" title="plshade1: Shade individual region on the basis of value"><code class="function">plshade1</code></a>
+      except for the type of the first parameter.
+      See <a class="link" href="plshade1.html" title="plshade1: Shade individual region on the basis of value"><code class="function">plshade1</code></a> for further discussion.
+    </p><div class="variablelist"><dl><dt><span class="term">
+          <em class="parameter"><code>a</code></em>
+          (<code class="literal">const PLFLT * const *</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nx</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ny</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>defined</code></em>
+          (<code class="literal">PLINT (*) (PLFLT, PLFLT)</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>xmin</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>xmax</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ymin</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ymax</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>shade_min</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>shade_max</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>sh_cmap</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>sh_color</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>sh_width</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>min_color</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>min_width</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>max_color</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>max_width</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>fill</code></em>
+          (<code class="literal">void (*) (PLINT, const PLFLT *, const PLFLT *)</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>rectangular</code></em>
+          (<code class="literal">PLBOOL</code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr</code></em>
+          (<code class="literal">
+            void (*) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer)
+          </code>, input)
+        </span></dt><dd><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr_data</code></em>
+          (<code class="literal">PLPointer</code>, input)
+        </span></dt><dd><p>
+          </p></dd></dl></div><p>
+      Redacted form:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+            General: <code class="function">plshade(a, defined, xmin, xmax, ymin, ymax, shade_min, shade_max, sh_cmap, sh_color, sh_width, min_color, min_width, max_color, max_width, fill, rectangular, pltr, pltr_data)</code>
+          </p></li><li class="listitem"><p>
+            Perl/PDL: Not available?
+          </p></li></ul></div><p>
+    </p><p>
+      This function is used in example 15.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plshades.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plshade1.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plshades</code>: Shade regions on the basis of value
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plshade1</code>: Shade individual region on the basis of value
+    </td></tr></table></div></body></html>

@@ -1,0 +1,213 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plshades: Shade regions on the basis of value</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plsfont.html" title="plsfont: Set family, style and weight of the current font"><link rel="next" href="plshade.html" title="plshade: Shade individual region on the basis of value"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plshades</code>: Shade regions on the basis of value
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plsfont.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plshade.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plshades: Shade regions on the basis of value"><div class="titlepage"><div><div><h4 class="title"><a name="plshades"></a>
+      <code class="function">plshades</code>: Shade regions on the basis of value
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+            <b class="fsfunc">plshades</b>
+          (</code></td><td>
+            <var class="pdparam">a</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nx</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ny</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">defined</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">xmin</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">xmax</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ymin</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ymax</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">clevel</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nlevel</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">fill_width</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">cont_color</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">cont_width</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">fill</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">rectangular</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr_data</var>
+          <code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Shade regions on the basis of value.  This is the high-level routine
+      for making continuous color shaded plots with cmap1 while
+      <a class="link" href="plshade.html" title="plshade: Shade individual region on the basis of value"><code class="function">plshade</code></a> (or <a class="link" href="plshade1.html" title="plshade1: Shade individual region on the basis of value"><code class="function">plshade1</code></a>) are used for individual shaded regions
+      using either cmap0 or cmap1.
+      <code class="filename">examples/c/x16c.c</code> shows a number of examples
+      for using this function.
+      See the following discussion of the
+      arguments and <a class="xref" href="contour-plots.html" title="Contour and Shade Plots">the section called “Contour and Shade Plots”</a> for
+      more information.
+    </p><div class="variablelist"><dl><dt><span class="term">
+          <em class="parameter"><code>a</code></em>
+          (<code class="literal">const PLFLT * const *</code>, input)
+        </span></dt><dd><p>
+            Contains ** pointer to array to be plotted. The array must have been declared
+            as PLFLT a[nx][ny].
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nx</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            First dimension of array "a".
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ny</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Second dimension of array "a".
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>defined</code></em>
+          (<code class="literal">PLINT (*) (PLFLT, PLFLT)</code>, input)
+        </span></dt><dd><p>
+            User function specifying regions excluded from the shading
+            plot.  This function accepts x and y coordinates as input
+            arguments and must return 0 if the point is in the excluded
+            region or 1 otherwise. This argument can be NULL if all the
+            values are valid.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>xmin</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines the "grid" coordinates.  The data a[0][0] has a
+            position of (xmin,ymin), a[nx-1][0] has a position at (xmax,ymin)
+            and so on.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>xmax</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines the "grid" coordinates.  The data a[0][0] has a
+            position of (xmin,ymin), a[nx-1][0] has a position at (xmax,ymin)
+            and so on.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ymin</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines the "grid" coordinates.  The data a[0][0] has a
+            position of (xmin,ymin), a[nx-1][0] has a position at (xmax,ymin)
+            and so on.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ymax</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines the "grid" coordinates.  The data a[0][0] has a
+            position of (xmin,ymin), a[nx-1][0] has a position at (xmax,ymin)
+            and so on.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>clevel</code></em>
+          (<code class="literal">const PLFLT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to array containing the data levels corresponding to
+            the edges of each shaded region that will be plotted by this
+            function.  To work properly the levels should be monotonic.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nlevel</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Number of shades plus 1 (i.e., the number of shade edge values
+            in <code class="literal">
+              <em class="parameter"><code>clevel</code></em>
+            </code>).
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>fill_width</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines line width used by the fill pattern.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>cont_color</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Defines pen color used for contours defining edges of shaded
+            regions.  The pen color is only temporary set for the
+            contour drawing.  Set this value to zero or less if no shade edge contours are wanted.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>cont_width</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Defines line width used for contours defining edges of shaded
+            regions.  This value may not be honored by all drivers.
+            The pen width is only temporary set for the
+            contour drawing.  Set this value to zero or less if no shade edge contours are wanted.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>fill</code></em>
+          (<code class="literal">void (*) (PLINT, const PLFLT *, const PLFLT *)</code>, input)
+        </span></dt><dd><p>
+            Routine used to fill the region.  Use <a class="link" href="plfill.html" title="plfill: Draw filled polygon"><code class="function">plfill</code></a>.  Future version of
+            PLplot may have other fill routines.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>rectangular</code></em>
+          (<code class="literal">PLBOOL</code>, input)
+        </span></dt><dd><p>
+            Set <code class="literal">
+              <em class="parameter"><code>rectangular</code></em>
+            </code> to true
+            if rectangles map to rectangles after coordinate transformation
+            with <code class="literal">
+              <em class="parameter"><code>pltrl</code></em>
+            </code>.  Otherwise,
+            set <code class="literal">
+              <em class="parameter"><code>rectangular</code></em>
+            </code> to false.
+            If <code class="literal">
+              <em class="parameter"><code>rectangular</code></em>
+            </code>
+            is set to true, plshade tries to save time by
+            filling large rectangles.  This optimization fails if
+            the coordinate transformation distorts the shape of rectangles.
+            For example a plot in polar coordinates has to have
+            <code class="literal">
+              <em class="parameter"><code>rectangular</code></em>
+            </code>
+            set to false.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr</code></em>
+          (<code class="literal">
+            void (*) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer)
+          </code>, input)
+        </span></dt><dd><p>
+            Pointer to function that defines transformation between indices
+            in array <code class="literal">
+              <em class="parameter"><code>z</code></em>
+            </code> and the
+            world coordinates (C only).  Transformation functions are
+            provided in the PLplot library:
+            <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a> for identity mapping, and <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a> and <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a> for
+            arbitrary mappings respectively defined by one- and
+            two-dimensional arrays.  In addition, user-supplied routines
+            for the transformation can be used as well.  Examples of
+            all of these approaches are given in
+            <a class="xref" href="contour-plots.html#contour-plots-c" title="Contour Plots from C">the section called “Contour Plots from C”</a>.
+            The transformation function should
+            have the form given by any of <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, or <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr_data</code></em>
+          (<code class="literal">PLPointer</code>, input)
+        </span></dt><dd><p>
+            Extra parameter to help
+            pass information to <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>, or whatever routine
+            that is externally supplied.
+          </p></dd></dl></div><p>
+      Redacted form:
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+            General: <code class="function">plshades(a, defined, xmin, xmax, ymin, ymax, clevel, fill_width, cont_color, cont_width, fill, rectangular, pltr, pltr_data)</code>
+          </p></li><li class="listitem"><p>
+            Perl/PDL: <code class="function">plshades(a, xmin, xmax, ymin, ymax, clevel, fill_width, cont_color, cont_width, fill, rectangular, defined, pltr, pltr_data)</code>
+          </p></li></ul></div><p>
+    </p><p>
+      This function is used in examples 16,21.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plsfont.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plshade.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plsfont</code>: Set family, style and weight of the
+      current font
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plshade</code>:  Shade individual region on the basis of value
+    </td></tr></table></div></body></html>

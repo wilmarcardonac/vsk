@@ -1,0 +1,25 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLSPAL0 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplspal0\fP - Set the colors for color table 0 from a cmap0 file 
+.SH SYNOPSIS
+\fBplspal0\fP(\fIfilename\fP)
+.SH DESCRIPTION
+
+.P
+Set the colors for color table 0 from a cmap0 file 
+.P
+Redacted form: \fBplspal0(filename)\fP
+.P
+This function is in example 16. 
+.SH ARGUMENTS
+.TP
+\fIfilename\fP (const char *, input) 
+The name of the cmap0 file, or a empty to string to specify the default cmap0 file. 
+
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

@@ -1,0 +1,75 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plscmap1a: Set cmap1 colors using 8-bit RGB values and double alpha transparency values</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plscmap1.html" title="plscmap1: Set cmap1 colors using 8-bit RGB values"><link rel="next" href="plscmap1l.html" title="plscmap1l: Set cmap1 colors using a piece-wise linear relationship"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plscmap1a</code>: Set cmap1 colors using 8-bit RGB values
+      and double alpha transparency values
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plscmap1.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plscmap1l.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plscmap1a: Set cmap1 colors using 8-bit RGB values and double alpha transparency values"><div class="titlepage"><div><div><h4 class="title"><a name="plscmap1a"></a>
+      <code class="function">plscmap1a</code>: Set cmap1 colors using 8-bit RGB values
+      and double alpha transparency values
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+            <b class="fsfunc">plscmap1a</b>
+          (</code></td><td>
+            <var class="pdparam">r</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">g</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">b</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">alpha</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ncol1</var>
+          <code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Set cmap1 colors using 8-bit RGB values (see <a class="xref" href="color.html#color-map-1" title="Color Map1">the section called “Color Map1”</a>) and double alpha transparency values.
+      This also sets the number of colors.
+    </p><div class="variablelist"><dl><dt><span class="term">
+          <em class="parameter"><code>r</code></em>
+          (<code class="literal">const PLINT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to array with set of unsigned 8-bit integers (0-255)
+            representing the degree of red in the color.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>g</code></em>
+          (<code class="literal">const PLINT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to array with set of unsigned 8-bit integers (0-255)
+            representing the degree of green in the color.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>b</code></em>
+          (<code class="literal">const PLINT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to array with set of unsigned 8-bit integers (0-255)
+            representing the degree of blue in the color.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>alpha</code></em>
+          (<code class="literal">const PLFLT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to array with set of double values (0.0-1.0)
+            representing the alpha transparency value of the color.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ncol1</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Number of items in the
+            <code class="literal">
+              <em class="parameter"><code>r</code></em>
+            </code>,
+            <code class="literal">
+              <em class="parameter"><code>g</code></em>
+            </code>,
+            <code class="literal">
+              <em class="parameter"><code>b</code></em>
+            </code>, and
+            <code class="literal">
+              <em class="parameter"><code>alpha</code></em>
+            </code> arrays.
+          </p></dd></dl></div><p>
+      Redacted form: <code class="function">plscmap1a(r, g, b, alpha)</code>
+    </p><p>
+      This function is used in example 31.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plscmap1.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plscmap1l.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plscmap1</code>: Set cmap1 colors using 8-bit RGB
+      values
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plscmap1l</code>: Set cmap1 colors using a
+      piece-wise linear relationship
+    </td></tr></table></div></body></html>

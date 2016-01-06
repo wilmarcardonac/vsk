@@ -1,0 +1,20 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLVSTA 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplvsta\fP - Select standard viewport 
+.SH SYNOPSIS
+\fBplvsta\fP()
+.SH DESCRIPTION
+
+.P
+Sets up a standard viewport, leaving a left-hand margin of seven character heights, and four character heights around the other three sides. 
+.P
+Redacted form: \fBplvsta()\fP
+.P
+This function is used in examples 1,12,14,17,25,29. 
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

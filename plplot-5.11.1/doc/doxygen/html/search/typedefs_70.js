@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['plbool',['PLBOOL',['../plplot_8h.html#aeaedd6596f4fb4446c7fd5ad8f0e9673',1,'plplot.h']]],
+  ['pld_5fbop_5ffp',['plD_bop_fp',['../disptab_8h.html#aaa8a12987dacd8fd58a57721a2831c9b',1,'disptab.h']]],
+  ['pld_5feop_5ffp',['plD_eop_fp',['../disptab_8h.html#a6deaecb817eab46142ebb2eac119ff44',1,'disptab.h']]],
+  ['pld_5fesc_5ffp',['plD_esc_fp',['../disptab_8h.html#a9e9485952359f4468e741bede6a3bf7c',1,'disptab.h']]],
+  ['pld_5finit_5ffp',['plD_init_fp',['../disptab_8h.html#ab632eb68a304050406c728ddda870f27',1,'disptab.h']]],
+  ['pld_5fline_5ffp',['plD_line_fp',['../disptab_8h.html#abce40fffedc7817bd7b5b8b40289d225',1,'disptab.h']]],
+  ['pld_5fpolyline_5ffp',['plD_polyline_fp',['../disptab_8h.html#a9f48a71d00a4f89645d56584ab63aff0',1,'disptab.h']]],
+  ['pld_5fstate_5ffp',['plD_state_fp',['../disptab_8h.html#a602f9c3c5ba52d7fabf44f1934e34d0f',1,'disptab.h']]],
+  ['pld_5ftidy_5ffp',['plD_tidy_fp',['../disptab_8h.html#a831fc632009fb03b45bff513ce0b0dbf',1,'disptab.h']]],
+  ['pld_5fwait_5ffp',['plD_wait_fp',['../disptab_8h.html#a19790721c3ab3e176adb204bb0cc78be',1,'disptab.h']]],
+  ['pldispatchinit',['PLDispatchInit',['../plcore_8h.html#a4a9d094222588a4e824fa378f696bf06',1,'plcore.h']]],
+  ['plf2ops',['PLF2OPS',['../plplot_8h.html#a8073ceeb1a43c3988d0f750cbf080c1c',1,'plplot.h']]],
+  ['plflt',['PLFLT',['../plplot_8h.html#a245c0090f1fa5e95a4ed3522975dcbf3',1,'plplot.h']]],
+  ['plint',['PLINT',['../plplot_8h.html#ad703d3a4f671fdd34ec71f3480f6af2d',1,'plplot.h']]],
+  ['plint64',['PLINT64',['../plplot_8h.html#a75b290585084690535ae97d74b07b570',1,'plplot.h']]],
+  ['plplotter',['PlPlotter',['../plplotter_8c.html#af28f8c51f905ee041775cb8488ccaf7b',1,'plplotter.c']]],
+  ['plpointer',['PLPointer',['../plplot_8h.html#ae1d5cf832d1a16ecbacbf5eb4bf5e8f1',1,'plplot.h']]],
+  ['pltr_5ffunc',['pltr_func',['../plplotjavacJAVA__wrap_8c.html#a3c135a6feccda3fdd1146327cab6c7a9',1,'pltr_func():&#160;plplotjavacJAVA_wrap.c'],['../plplotluacLUA__wrap_8c.html#a3c135a6feccda3fdd1146327cab6c7a9',1,'pltr_func():&#160;plplotluacLUA_wrap.c'],['../plplot__octaveOCTAVE__wrap_8cxx.html#a3c135a6feccda3fdd1146327cab6c7a9',1,'pltr_func():&#160;plplot_octaveOCTAVE_wrap.cxx'],['../plplotcmodulePYTHON__wrap_8c.html#a3c135a6feccda3fdd1146327cab6c7a9',1,'pltr_func():&#160;plplotcmodulePYTHON_wrap.c']]],
+  ['pluint',['PLUINT',['../plplot_8h.html#a6d6b24fb8596cddc72a21a37cbda14e2',1,'plplot.h']]],
+  ['plunicode',['PLUNICODE',['../plplot_8h.html#a1d3c883be63b6e7855f5bc7ad5212915',1,'plplot.h']]],
+  ['pt',['PT',['../plgridd_8c.html#a16e1ed82300e278c21da97ea77aee31c',1,'plgridd.c']]],
+  ['py_5fssize_5ft',['Py_ssize_t',['../plplotcmodulePYTHON__wrap_8c.html#a47424a8953c340f500027db7e6c00173',1,'plplotcmodulePYTHON_wrap.c']]]
+];

@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plhlsrgb: Convert HLS color to RGB</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plhist.html" title="plhist: Plot a histogram from unbinned data"><link rel="next" href="plimagefr.html" title="plimagefr: Plot a 2D matrix using cmap1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plhlsrgb</code>: Convert HLS color to RGB
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plhist.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plimagefr.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plhlsrgb: Convert HLS color to RGB"><div class="titlepage"><div><div><h4 class="title"><a name="plhlsrgb"></a>
+      <code class="function">plhlsrgb</code>: Convert HLS color to RGB
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+	    <b class="fsfunc">plhlsrgb</b>
+	  (</code></td><td><var class="pdparam">h</var>, </td></tr><tr><td> </td><td><var class="pdparam">l</var>, </td></tr><tr><td> </td><td><var class="pdparam">s</var>, </td></tr><tr><td> </td><td><var class="pdparam">p_r</var>, </td></tr><tr><td> </td><td><var class="pdparam">p_g</var>, </td></tr><tr><td> </td><td><var class="pdparam">p_b</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Convert HLS color coordinates to RGB.
+    </p><div class="variablelist"><dl><dt><span class="term">
+	  <em class="parameter"><code>h</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    Hue, in degrees on the colour cone (0.0-360.0)
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>l</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    Lightness, expressed as a fraction of the axis of the colour
+	    cone (0.0-1.0)
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>s</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    Saturation, expressed as a fraction of the radius of the
+	    colour cone (0.0-1.0)
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>p_r</code></em>
+	  (<code class="literal">PLFLT *</code>, output)
+	</span></dt><dd><p>
+	    Pointer to red intensity (0.0-1.0) of the colour
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>p_g</code></em>
+	  (<code class="literal">PLFLT *</code>, output)
+	</span></dt><dd><p>
+	    Pointer to green intensity (0.0-1.0) of the colour
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>p_b</code></em>
+	  (<code class="literal">PLFLT *</code>, output)
+	</span></dt><dd><p>
+	    Pointer to blue intensity (0.0-1.0) of the colour
+	  </p></dd></dl></div><p>
+      Redacted form: 
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+	    General: <code class="function">plhlsrgb(h, l, s, p_r, p_g, p_b)</code>
+	  </p></li><li class="listitem"><p>
+	    Perl/PDL: Not available? Implemented as plhls?
+	  </p></li></ul></div><p>
+    </p><p>
+      This function is used in example 2.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plhist.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plimagefr.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plhist</code>: Plot a histogram from unbinned data
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plimagefr</code>: Plot a 2D matrix using cmap1
+    </td></tr></table></div></body></html>

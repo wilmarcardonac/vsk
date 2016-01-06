@@ -1,0 +1,36 @@
+
+PolSpice installation   (2015-08-26)
+=====================
+
+background: 
+----------
+see HISTORY 
+
+usage:
+-----
+see README
+
+required libraries:
+------------------
+	- Healpix 3.2+        (http://healpix.sourceforge.net)
+
+	- cfitsio 3.2+        (http://heasarc.nasa.gov/fitsio/fitsio.html)
+
+	- Piolib is only necessary to people working in connection with
+	the Planck HFI Data Processing Center. 
+	Those people should rather use the HL2 CVS server
+	to obtain the full analysis pipeline, including PolSpice
+
+installation:
+------------
+in src/ create a Makefile adapted to your 
+compiler and system configuration,
+using Makefile_template as a template.
+*** Make sure that each file ending with .F90
+ is preprocessed (with cpp or fpp) before compilation ***
+Then do   make
+and read the README
+or do
+spice -help
+
+

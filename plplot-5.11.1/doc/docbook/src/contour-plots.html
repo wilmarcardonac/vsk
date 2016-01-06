@@ -1,0 +1,65 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Contour and Shade Plots</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="advanced.html" title="Chapter 3. Advanced Use of PLplot"><link rel="prev" href="tri-d-plots.html" title="Three Dimensional Surface Plots"><link rel="next" href="legends.html" title="Legends and color bars"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Contour and Shade Plots</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="tri-d-plots.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Advanced Use of PLplot</th><td width="20%" align="right"> <a accesskey="n" href="legends.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Contour and Shade Plots"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="contour-plots"></a>Contour and Shade Plots</h2></div></div></div><p>
+      Several routines are available in PLplot which perform a contour or
+      shade plot of data stored in a two-dimensional array.  The contourer
+      uses a contour following algorithm so that it is possible to
+      use non-continuous line styles.  Further, one may specify arbitrary
+      coordinate mappings from array indices to world coordinates, such as
+      for contours in a polar coordinate system.  In this case it is best
+      to draw the distinction between the C and Fortran 95
+      interfaces so these are handled in turn.
+    </p><div class="sect2" title="Contour Plots from C"><div class="titlepage"><div><div><h3 class="title"><a name="contour-plots-c"></a>Contour Plots from C</h3></div></div></div><p>
+	<a class="link" href="plcont.html" title="plcont: Contour plot"><code class="function">plcont</code></a> is the routine callable from C for plotting contours.
+	This routine has the form:
+      </p><p>
+	</p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+	      <b class="fsfunc">plcont</b>
+	    (</code></td><td><var class="pdparam">z</var>, </td></tr><tr><td> </td><td><var class="pdparam">nx</var>, </td></tr><tr><td> </td><td><var class="pdparam">ny</var>, </td></tr><tr><td> </td><td><var class="pdparam">kx</var>, </td></tr><tr><td> </td><td><var class="pdparam">lx</var>, </td></tr><tr><td> </td><td><var class="pdparam">ky</var>, </td></tr><tr><td> </td><td><var class="pdparam">ly</var>, </td></tr><tr><td> </td><td><var class="pdparam">clevel</var>, </td></tr><tr><td> </td><td><var class="pdparam">nlevel</var>, </td></tr><tr><td> </td><td><var class="pdparam">pltr</var>, </td></tr><tr><td> </td><td><var class="pdparam">pltr_data</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+      </p><p>
+	where <code class="literal">z</code> is the two-dimensional array of size
+	<code class="literal">nx</code> by <code class="literal">ny</code> containing samples
+	of the function to be contoured.  (<code class="literal">z</code> is a
+	vectored two-dimensional array as described in the previous
+	section.  It is <span class="emphasis"><em>not</em></span> a fixed-size
+	two-dimensional array.) The parameters <code class="literal">kx</code>,
+	<code class="literal">lx</code>, <code class="literal">ky</code> and
+	<code class="literal">ly</code> specify the portion of <code class="literal">z</code>
+	that is to be considered.  The array <code class="literal">clevel</code> of
+	length <code class="literal">nlevel</code> is a list of the desired contour
+	levels.
+      </p><p>
+	The path of each contour is initially computed in terms of the
+	values of the array indices which range from <code class="literal">0</code>
+	to <code class="literal">nx-1</code> in the first index and from
+	<code class="literal">0</code> to <code class="literal">ny-1</code> in the second
+	index.  Before these can be drawn in the current window (see <a class="xref" href="viewport_window.html#windows" title="Defining the Window">the section called “Defining the Window”</a>), it is necessary to convert from these array
+	indices into world coordinates.  This is done by passing a pointer
+	<code class="literal">pltr</code> to a user-defined transformation function 
+	to <a class="link" href="plcont.html" title="plcont: Contour plot"><code class="function">plcont</code></a>.  For C use of <a class="link" href="plcont.html" title="plcont: Contour plot"><code class="function">plcont</code></a> (and <a class="link" href="plshade.html" title="plshade: Shade individual region on the basis of value"><code class="function">plshade</code></a>, see next subsection) 
+	we have included directly in
+	the PLplot library the following transformation routines:
+	<a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a> (identity transformation or you can
+	enter a NULL argument to get the same effect); <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>
+	(linear interpolation in singly dimensioned coordinate arrays);
+	and  <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a> (linear interpolation in doubly dimensioned coordinate
+	arrays).  Examples of the use of these transformation 
+	routines are given in <code class="filename">examples/c/x09c.c</code>,
+	<code class="filename">examples/c/x14c.c</code>, and
+	<code class="filename">examples/c/x16c.c</code>.  These same three examples
+	also demonstrate a user-defined transformation function 
+	<code class="literal">mypltr</code> which is capable of 
+	arbitrary translation, rotation, and/or shear. By defining other
+	transformation subroutines, it is possible to draw contours wrapped
+	around polar grids etc.
+      </p></div><div class="sect2" title="Shade Plots from C"><div class="titlepage"><div><div><h3 class="title"><a name="shade-plots-c"></a>Shade Plots from C</h3></div></div></div><p>
+	NEEDS DOCUMENTATION.  Follow the plshade and plshades usage in
+	<code class="filename">examples/c/x??c.c</code>.
+      </p></div><div class="sect2" title="Contour Plots from the Fortran 95 interface"><div class="titlepage"><div><div><h3 class="title"><a name="contour-plots-f95"></a>Contour Plots from the Fortran 95 interface</h3></div></div></div><p>
+	NEEDS DOCUMENTATION.  Follow the plcont usage (with a variety
+	of overloaded forms available with different arguments) in 
+	<code class="filename">examples/f95/x??f.f90</code>.
+      </p></div><div class="sect2" title="Shade Plots from the Fortran 95 interface"><div class="titlepage"><div><div><h3 class="title"><a name="shade-plots-f95"></a>Shade Plots from the Fortran 95 interface</h3></div></div></div><p>
+	NEEDS DOCUMENTATION.  Follow the plshade and plshades usage 
+	(with a variety
+	of overloaded forms available with different arguments) in
+	<code class="filename">examples/f95/x??f.f90</code>.
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="tri-d-plots.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="advanced.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="legends.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Three Dimensional Surface Plots </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Legends and color bars</td></tr></table></div></body></html>

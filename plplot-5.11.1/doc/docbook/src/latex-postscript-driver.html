@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>The LaTeX PostScript Driver</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="output-drivers.html" title="Chapter 6. The PLplot Output Driver Family"><link rel="prev" href="truetype-postscript-driver.html" title="The TrueType PostScript Driver"><link rel="next" href="svg-driver.html" title="The SVG Driver"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">The LaTeX PostScript Driver</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="truetype-postscript-driver.html">Prev</a> </td><th width="60%" align="center">Chapter 6. The PLplot Output Driver Family</th><td width="20%" align="right"> <a accesskey="n" href="svg-driver.html">Next</a></td></tr></table><hr></div><div class="sect1" title="The LaTeX PostScript Driver"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="latex-postscript-driver"></a>The LaTeX PostScript Driver</h2></div></div></div><p> 
+      This is a PostScript device driver that writes out its results in two
+      files.  (1) The encapsulated postscript (EPS) file contains all the
+      postscript commands for rendering the plot without characters, and (2)
+      the LaTeX file contains a fragment of LaTeX that reads in the EPS file
+      and renders the plot characters using LaTeX commands (and LaTeX
+      fonts!) in alignment with the EPS file to produce a combined result.
+    </p><p>
+      
+      Suppose you create the EPS and LaTeX files with the following command:
+      <strong class="userinput"><code>./x01c -dev pstex -o x01c.eps</code></strong>.  The EPS file
+      is then stored in <code class="filename">x01c.eps</code> and the LaTeX fragment
+      is stored in <code class="filename">x01c.eps_t</code>.  Then
+      you may use the generated files with the <code class="filename">x01c.tex</code>
+      LaTeX code that follows:
+    </p><p>
+      </p><pre class="programlisting">\documentclass{article}
+      \usepackage[dvips]{graphicx}
+      \begin{document}
+      \input{x01c.eps_t}
+      \end{document}
+      </pre><p>
+    </p><p>
+      and generate PostScript results using the LaTeX fonts with the following
+      command: <strong class="userinput"><code>latex x01c.tex; dvips -f &lt;x01c.dvi &gt;x01c.ps
+      </code></strong>.  The results look good (aside from an obvious bounding-box
+      problem that still needs to be fixed with this device) and should be
+      useful for LaTeX enthusiasts.
+    </p><p>
+      There are no available driver options.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="truetype-postscript-driver.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="output-drivers.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="svg-driver.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">The TrueType PostScript Driver </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> The SVG Driver</td></tr></table></div></body></html>

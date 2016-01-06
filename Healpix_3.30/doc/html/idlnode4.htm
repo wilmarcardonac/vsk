@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.1//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Changes between releases 3.20 and 3.30</TITLE>
+<META NAME="description" CONTENT="Changes between releases 3.20 and 3.30">
+<META NAME="keywords" CONTENT="idl">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="idl.css">
+
+<LINK REL="next" HREF="idlnode5.htm">
+<LINK REL="previous" HREF="idlnode3.htm">
+<LINK REL="up" HREF="idl.htm">
+<LINK REL="next" HREF="idlnode5.htm">
+</HEAD>
+
+<BODY >
+
+<DIV CLASS="navigation"><body text="#000000" bgcolor="#FFFFFA">
+<!--Navigation Panel-->
+<A NAME="tex2html269"
+  HREF="idlnode3.htm">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html275"
+  HREF="idl.htm">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html279"
+  HREF="idlnode5.htm">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html277"
+  HREF="idlnode1.htm">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Previous:</B> <A NAME="tex2html270"
+  HREF="idlnode3.htm">What is available?</A>
+
+<B>Up:</B> <A NAME="tex2html276"
+  HREF="idl.htm">HEALPix/IDL subroutines</A>
+
+<B> Next:</B> <A NAME="tex2html280"
+  HREF="idlnode5.htm">Previous changes</A>
+<B> Top:</B> <a href="main.htm">Main Page</a></DIV>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00040000000000000000">
+Changes between releases 3.20 and 3.30</A>
+</H1>
+
+<P>
+<DL COMPACT><DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ <A HREF="idlnode43.htm#idl:mollview"><TT>azeqview, cartview, gnomview, mollview,
+orthview</TT></A> visualization routines:
+<DL COMPACT><DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ addition of <A HREF="idlnode43.htm#idl:mollview:pdf"><TT>PDF</TT></A> keyword for production of Adobe PDF outputs;
+ <DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ addition of <A HREF="idlnode43.htm#idl:mollview:latex"><TT>LATEX</TT></A> keyword for genuine 
+ or emulated <SPAN CLASS="logo,LaTeX">L<SUP><SMALL>A</SMALL></SUP>T<SMALL>E</SMALL>X</SPAN> processing of character strings;
+ <DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ addition of <A HREF="idlnode43.htm#idl:mollview:pfonts"><TT>PFONTS</TT></A> keyword to select 
+origin and type of character font;
+ <DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ the <A HREF="idlnode43.htm#idl:mollview:crop"><TT>CROP</TT></A> keyword now has the same behavior for all output media (GIF, JPEG, PDF, PNG, PS, ... and X);  the <A HREF="idlnode43.htm#idl:mollview:nobar"><TT>NOBAR</TT></A> keyword now removes the color bar <EM>or</EM> the polarization color wheel, as applicable; correct EQUINOX date in header of output <A HREF="idlnode43.htm#idl:mollview:fits">FITS</A> map; the double precision maps and those with constant value are now correctly handled.
+</DL>
+<DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ <A HREF="idlnode23.htm#idl:fits2cl"><TT>fits2cl</TT></A>: addition of <A HREF="idlnode23.htm#idl:fits2cl:planck2"><TT>/PLANCK2</TT></A> keyword
+to read best fit <SPAN CLASS="MATH"><I>C</I>(<I>l</I>)</SPAN> model to Planck 2015 data.
+<DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ new routines <A HREF="idlnode46.htm#idl:nest2uniq"><TT>nest2uniq</TT></A> and <A HREF="idlnode68.htm#idl:uniq2nest"><TT>uniq2nest</TT></A> for conversion of standard pixel index to/from Unique ID number. See <A HREF="./intronode4.htm#intro:unique">''The Unique Identifier scheme''</A> section in <A NAME="tex2html4"
+  HREF="intro.htm">''<b>HEALPix</b> Introduction Document''</A>
+for more details.
+<DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ <b>HEALPix</b> enabled GDL commands (<TT>hgdl</TT> and  <TT>hgdlde</TT>) are defined during the 
+<A HREF="#install:idlgdlconfig">configuration process</A>.
+<DT><DD><IMG WIDTH="14" HEIGHT="14" SRC="greenball.png" ALT="*">
+ update of the required
+    <A NAME="tex2html5"
+  HREF="http://idlastro.gsfc.nasa.gov/homepage.html"><TT>IDL-astron</TT> library</A>
+routines, and <A NAME="tex2html6"
+  HREF="http://www.idlcoyote.com"><TT>Coyote</TT></A>
+library
+    routines (2015-09-23).
+</DL>
+
+<P>
+
+<DIV CLASS="navigation"><HR>
+<!--Navigation Panel-->
+<A NAME="tex2html269"
+  HREF="idlnode3.htm">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.png"></A> 
+<A NAME="tex2html275"
+  HREF="idl.htm">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.png"></A> 
+<A NAME="tex2html279"
+  HREF="idlnode5.htm">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.png"></A> 
+<A NAME="tex2html277"
+  HREF="idlnode1.htm">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.png"></A>  
+<BR>
+<B> Previous:</B> <A NAME="tex2html270"
+  HREF="idlnode3.htm">What is available?</A>
+
+<B>Up:</B> <A NAME="tex2html276"
+  HREF="idl.htm">HEALPix/IDL subroutines</A>
+
+<B> Next:</B> <A NAME="tex2html280"
+  HREF="idlnode5.htm">Previous changes</A>
+<B> Top:</B> <a href="main.htm">Main Page</a></DIV>
+<!--End of Navigation Panel-->
+<ADDRESS>
+Version 3.30, 2015-10-08
+</ADDRESS>
+</BODY>
+</HTML>

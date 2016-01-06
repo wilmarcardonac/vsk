@@ -1,0 +1,86 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plimagefr: Plot a 2D matrix using cmap1</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plhlsrgb.html" title="plhlsrgb: Convert HLS color to RGB"><link rel="next" href="plimage.html" title="plimage: Plot a 2D matrix using cmap1 with automatic colour adjustment"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plimagefr</code>: Plot a 2D matrix using cmap1
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plhlsrgb.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plimage.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plimagefr: Plot a 2D matrix using cmap1"><div class="titlepage"><div><div><h4 class="title"><a name="plimagefr"></a>
+      <code class="function">plimagefr</code>: Plot a 2D matrix using cmap1
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+	    <b class="fsfunc">plimagefr</b>
+	  (</code></td><td><var class="pdparam">idata</var>, </td></tr><tr><td> </td><td><var class="pdparam">nx</var>, </td></tr><tr><td> </td><td><var class="pdparam">ny</var>, </td></tr><tr><td> </td><td><var class="pdparam">xmin</var>, </td></tr><tr><td> </td><td><var class="pdparam">xmax</var>, </td></tr><tr><td> </td><td><var class="pdparam">ymin</var>, </td></tr><tr><td> </td><td><var class="pdparam">ymax</var>, </td></tr><tr><td> </td><td><var class="pdparam">zmin</var>, </td></tr><tr><td> </td><td><var class="pdparam">zmax</var>, </td></tr><tr><td> </td><td><var class="pdparam">valuemin</var>, </td></tr><tr><td> </td><td><var class="pdparam">valuemax</var>, </td></tr><tr><td> </td><td><var class="pdparam">pltr</var>, </td></tr><tr><td> </td><td><var class="pdparam">pltr_data</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Plot a 2D matrix using cmap1.
+    </p><div class="variablelist"><dl><dt><span class="term">
+	  <em class="parameter"><code>idata</code></em>
+	  (<code class="literal">const PLFLT * const *</code>, input)
+	</span></dt><dd><p>
+	    A 2D array of values (intensities) to plot.  Should have
+	    dimensions idata[nx][ny].
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>nx, ny</code></em>
+	  (<code class="literal">PLINT</code>, input)
+	</span></dt><dd><p>
+	    Dimensions of idata
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>xmin, xmax, ymin, ymax</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    Stretch image data to these Plot coordinates.  idata[0][0]
+	    corresponds to (xmin, ymin) and idata[nx - 1][ny - 1] corresponds
+	    to (xmax, ymax).
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>zmin, zmax</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    Only data between zmin and zmax (inclusive) will be plotted.
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>valuemin, valuemax</code></em>
+	  (<code class="literal">PLFLT</code>, input)
+	</span></dt><dd><p>
+	    The minimum and maximum data values to use for value to color
+	    mappings.  A datum equal to or less than valuemin will be
+	    plotted with color 0.0, while a datum equal to or greater than
+	    valuemax will be plotted with color 1.0.  Data between valuemin
+	    and valuemax map linearly to colors between 0.0 and 1.0.
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>pltr</code></em>
+	  (<code class="literal">void (*) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer)
+	  </code>, input)
+	</span></dt><dd><p>
+            Pointer to function that defines a transformation between the data
+            in the array <code class="literal"><em class="parameter"><code>idata</code></em></code> and
+            world coordinates.  An input coordinate of
+            <code class="literal">(0, 0)</code> corresponds to the "top-left" corner of
+            <code class="literal"><em class="parameter"><code>idata</code></em></code> while
+            <code class="literal">(nx, ny)</code> corresponds to the "bottom-right"
+            corner of <code class="literal"><em class="parameter"><code>idata</code></em></code>.  Some
+            transformation functions are provided in the PLplot library:
+            <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a> for identity mapping, and <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a> and <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a> for
+            arbitrary mappings respectively defined by one- and
+            two-dimensional arrays.  In addition, user-supplied routines for
+            the transformation can be used as well.  Examples of all of these
+            approaches are given in <a class="xref" href="contour-plots.html#contour-plots-c" title="Contour Plots from C">the section called “Contour Plots from C”</a>.  The
+            transformation function should have the form given by any of
+            <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, or <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>.
+	  </p></dd><dt><span class="term">
+	  <em class="parameter"><code>pltr_data</code></em>
+	  (<code class="literal">PLPointer</code>, input)
+	</span></dt><dd><p>
+	    Extra parameter to help
+	    pass information to <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>, or whatever routine
+	    is externally supplied.
+	  </p></dd></dl></div><p>
+      Redacted form: 
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+	    General:
+	    <code class="function">
+	      plimagefr(idata, xmin, xmax, ymin, ymax,
+	      zmin, zmax, valuemin, valuemax, pltr, pltr_data)
+	    </code>
+	  </p></li></ul></div><p>
+    </p><p>
+      This function is used in example 20.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plhlsrgb.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plimage.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plhlsrgb</code>: Convert HLS color to RGB
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plimage</code>: Plot a 2D matrix using cmap1 with
+      automatic colour adjustment
+    </td></tr></table></div></body></html>

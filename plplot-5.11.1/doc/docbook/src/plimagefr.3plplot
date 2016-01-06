@@ -1,0 +1,44 @@
+.\" This page was automatically generated.  Do not edit!
+.\" 
+.TH PLIMAGEFR 3plplot  "August, 2015" "" "PLplot API"
+.SH NAME
+\fBplimagefr\fP - Plot a 2D matrix using cmap1 
+.SH SYNOPSIS
+\fBplimagefr\fP(\fIidata\fP, \fInx\fP, \fIny\fP, \fIxmin\fP, \fIxmax\fP, \fIymin\fP, \fIymax\fP, \fIzmin\fP, \fIzmax\fP, \fIvaluemin\fP, \fIvaluemax\fP, \fIpltr\fP, \fIpltr_data\fP)
+.SH DESCRIPTION
+
+.P
+Plot a 2D matrix using cmap1. 
+.P
+Redacted form:  General: \fBplimagefr(idata, xmin, xmax, ymin, ymax, zmin, zmax, valuemin, valuemax, pltr, pltr_data) \fP
+
+.P
+This function is used in example 20. 
+.SH ARGUMENTS
+.TP
+\fIidata\fP (const PLFLT * const *, input) 
+A 2D array of values (intensities) to plot.  Should have dimensions idata[nx][ny]. 
+.TP
+\fInx, ny\fP (PLINT, input) 
+Dimensions of idata 
+.TP
+\fIxmin, xmax, ymin, ymax\fP (PLFLT, input) 
+Stretch image data to these Plot coordinates.  idata[0][0] corresponds to (xmin, ymin) and idata[nx - 1][ny - 1] corresponds to (xmax, ymax). 
+.TP
+\fIzmin, zmax\fP (PLFLT, input) 
+Only data between zmin and zmax (inclusive) will be plotted. 
+.TP
+\fIvaluemin, valuemax\fP (PLFLT, input) 
+The minimum and maximum data values to use for value to color mappings.  A datum equal to or less than valuemin will be plotted with color 0.0, while a datum equal to or greater than valuemax will be plotted with color 1.0.  Data between valuemin and valuemax map linearly to colors between 0.0 and 1.0. 
+.TP
+\fIpltr\fP (void (*) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer) , input) 
+Pointer to function that defines a transformation between the data in the array \fIidata\fP and world coordinates.  An input coordinate of (0, 0) corresponds to the "top-left" corner of \fIidata\fP while (nx, ny) corresponds to the "bottom-right" corner of \fIidata\fP.  Some transformation functions are provided in the PLplot library: \fBpltr0\fP(3plplot) for identity mapping, and \fBpltr1\fP(3plplot) and \fBpltr2\fP(3plplot) for arbitrary mappings respectively defined by one- and two-dimensional arrays.  In addition, user-supplied routines for the transformation can be used as well.  Examples of all of these approaches are given in the PLplot documentation.  The transformation function should have the form given by any of \fBpltr0\fP(3plplot), \fBpltr1\fP(3plplot), or \fBpltr2\fP(3plplot). 
+.TP
+\fIpltr_data\fP (PLPointer, input) 
+Extra parameter to help pass information to \fBpltr0\fP(3plplot), \fBpltr1\fP(3plplot), \fBpltr2\fP(3plplot), or whatever routine is externally supplied. 
+
+.SH AUTHORS
+Many developers (who are credited at http://plplot.sourceforge.net/credits.php)
+have contributed to PLplot over its long history.
+.SH SEE ALSO
+PLplot documentation at http://plplot.sourceforge.net/documentation.php.

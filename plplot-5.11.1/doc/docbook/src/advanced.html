@@ -1,0 +1,60 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 3. Advanced Use of PLplot</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="part_programming.html" title="Part II.  Programming"><link rel="prev" href="error.html" title="In Case of Error"><link rel="next" href="output-devices.html" title="Output Devices"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 3. Advanced Use of PLplot</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="error.html">Prev</a> </td><th width="60%" align="center">Part II.  Programming </th><td width="20%" align="right"> <a accesskey="n" href="output-devices.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter 3. Advanced Use of PLplot"><div class="titlepage"><div><div><h2 class="title"><a name="advanced"></a>Chapter 3. Advanced Use of PLplot</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="advanced.html#arguments">Command Line Arguments</a></span></dt><dt><span class="sect1"><a href="output-devices.html">Output Devices</a></span></dt><dd><dl><dt><span class="sect2"><a href="output-devices.html#driver-functions">Driver Functions</a></span></dt><dt><span class="sect2"><a href="output-devices.html#metafiles-plrender">PLplot Metafiles and Plrender</a></span></dt><dt><span class="sect2"><a href="output-devices.html#familying">Family File Output</a></span></dt><dt><span class="sect2"><a href="output-devices.html#interactive-devices">Interactive Output Devices</a></span></dt><dt><span class="sect2"><a href="output-devices.html#specifying-devices">Specifying the Output Device</a></span></dt></dl></dd><dt><span class="sect1"><a href="FreeType-notes.html">Adding FreeType Library Support to Bitmap Drivers</a></span></dt><dd><dl><dt><span class="sect2"><a href="FreeType-notes.html#idp7740672">Write a call back function to plot a single pixel</a></span></dt><dt><span class="sect2"><a href="FreeType-notes.html#idp7744000">Initialize FreeType</a></span></dt><dt><span class="sect2"><a href="FreeType-notes.html#idp7766192">Add A Command to redraw text (interactive drivers only)</a></span></dt><dt><span class="sect2"><a href="FreeType-notes.html#idp7770400">Add Function Prototypes</a></span></dt><dt><span class="sect2"><a href="FreeType-notes.html#idp7772496">Add Closing functions</a></span></dt></dl></dd><dt><span class="sect1"><a href="viewport_window.html">View Surfaces, (Sub-)Pages, Viewports and Windows</a></span></dt><dd><dl><dt><span class="sect2"><a href="viewport_window.html#viewports">Defining the Viewport</a></span></dt><dt><span class="sect2"><a href="viewport_window.html#windows">Defining the Window</a></span></dt><dt><span class="sect2"><a href="viewport_window.html#annotation">Annotating the Viewport</a></span></dt><dt><span class="sect2"><a href="viewport_window.html#standard-window">Setting up a Standard Window</a></span></dt></dl></dd><dt><span class="sect1"><a href="line-attributes.html">Setting Line Attributes</a></span></dt><dt><span class="sect1"><a href="fill-pattern.html">Setting the Area Fill Pattern</a></span></dt><dt><span class="sect1"><a href="color.html">Setting Color</a></span></dt><dd><dl><dt><span class="sect2"><a href="color.html#color-map-0">Color Map0</a></span></dt><dt><span class="sect2"><a href="color.html#color-map-1">Color Map1</a></span></dt></dl></dd><dt><span class="sect1"><a href="characters.html">Setting Character Attributes</a></span></dt><dd><dl><dt><span class="sect2"><a href="characters.html#hersheyfont">Hershey fonts</a></span></dt><dt><span class="sect2"><a href="characters.html#unicodefont">Unicode fonts</a></span></dt><dt><span class="sect2"><a href="characters.html#fci">FCI</a></span></dt><dt><span class="sect2"><a href="characters.html#escape-sequences">Escape sequences in text</a></span></dt><dt><span class="sect2"><a href="characters.html#character-size">Character size adjustment</a></span></dt></dl></dd><dt><span class="sect1"><a href="tri-d-plots.html">Three Dimensional Surface Plots</a></span></dt><dt><span class="sect1"><a href="contour-plots.html">Contour and Shade Plots</a></span></dt><dd><dl><dt><span class="sect2"><a href="contour-plots.html#contour-plots-c">Contour Plots from C</a></span></dt><dt><span class="sect2"><a href="contour-plots.html#shade-plots-c">Shade Plots from C</a></span></dt><dt><span class="sect2"><a href="contour-plots.html#contour-plots-f95">Contour Plots from the Fortran 95 interface</a></span></dt><dt><span class="sect2"><a href="contour-plots.html#shade-plots-f95">Shade Plots from the Fortran 95 interface</a></span></dt></dl></dd><dt><span class="sect1"><a href="legends.html">Legends and color bars</a></span></dt></dl></div><p> In this chapter, we describe advanced use of PLplot. </p><div class="sect1" title="Command Line Arguments"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="arguments"></a>Command Line Arguments</h2></div></div></div><p>
+      PLplot supports a large number of command line arguments, but it is
+      up to the user to pass these to PLplot for processing at the
+      beginning of execution.
+      <a class="link" href="plparseopts.html" title="plparseopts: Parse command-line arguments"><code class="function">plparseopts</code></a> is responsible for parsing
+      the argument list, removing all that are recognized by PLplot, and
+      taking the appropriate action before returning.  There are an
+      extensive number of options available to affect this process.  The
+      command line arguments recognized by PLplot are given by the -h
+      option:
+    </p><p>
+      </p><pre class="screen">
+	<code class="prompt">%</code> <strong class="userinput"><code>x01c -h</code></strong>
+	Usage:
+	./x01c [options]
+
+	PLplot options:
+	-h                   Print out this message
+	-v                   Print out the PLplot library version number
+	-verbose             Be more verbose than usual
+	-debug               Print debugging info (implies -verbose)
+	-dev name            Output device name
+	-o name              Output filename
+	-display name        X server to contact
+	-px number           Plots per page in x
+	-py number           Plots per page in y
+	-geometry geom       Window size, in pixels (e.g. -geometry 400x300)
+	-wplt xl,yl,xr,yr    Relative coordinates [0-1] of window into plot
+	-mar margin          Margin space in relative coordinates (0 to 0.5, def 0)
+	-a aspect            Page aspect ratio (def: same as output device)
+	-jx justx            Page justification in x (-0.5 to 0.5, def 0)
+	-jy justy            Page justification in y (-0.5 to 0.5, def 0)
+	-ori orient          Plot orientation (0,2=landscape, 1,3=portrait)
+	-freeaspect          Do not preserve aspect ratio on orientation swaps
+	-portrait            Sets portrait mode (both orientation and aspect ratio)
+	-width width         Sets pen width (1 &lt;= width &lt;= 10)
+	-bg color            Background color (0=black, FFFFFF=white)
+	-ncol0 n             Number of colors to allocate in cmap 0 (upper bound)
+	-ncol1 n             Number of colors to allocate in cmap 1 (upper bound)
+	-fam                 Create a family of output files
+	-fsiz size[kKmMgG]   Output family file size in MB (e.g. -fsiz 0.5G, def MB)
+	-fbeg number         First family member number on output
+	-finc number         Increment between family members
+	-fflen length        Family member number minimum field width
+	-nopixmap            Don't use pixmaps in X-based drivers
+	-db                  Double buffer X window output
+	-np                  No pause between pages
+	-server_name name    Main window name of PLplot server (tk driver)
+	-dpi dpi             Resolution, in dots per inch (e.g. -dpi 360x360)
+	-compression num     Sets compression level in supporting devices
+	-drvopt option[=value][,option[=value]]* Driver specific options
+	-cmap0 name          Sets PLplot color table 0 using the file name
+	-cmap1 name          Sets PLplot color table 1 using the file name
+      </pre><p>
+    </p><p>
+      The command-line options can also be set using the <a class="link" href="plsetopt.html" title="plsetopt: Set any command-line option"><code class="function">plsetopt</code></a> function, if invoked before <a class="link" href="plinit.html" title="plinit: Initialize PLplot"><code class="function">plinit</code></a>.
+    </p><p>
+      Some options are may not be recognized by individual drivers.  If an option is not recognized but should be, please contact the driver author via the plplot mailing lists.
+    </p><p>Many drivers have specific options that can be set using the -drvopt command line option or with <a class="link" href="plsetopt.html" title="plsetopt: Set any command-line option"><code class="function">plsetopt</code></a>.  These options are documented in <a class="xref" href="x-drivers.html" title="Chapter 5. The PLplot Display Driver Family">Chapter 5, <i>The PLplot Display Driver Family</i></a> and <a class="xref" href="output-drivers.html" title="Chapter 6. The PLplot Output Driver Family">Chapter 6, <i>The PLplot Output Driver Family</i></a>.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="error.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="part_programming.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="output-devices.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">In Case of Error </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Output Devices</td></tr></table></div></body></html>

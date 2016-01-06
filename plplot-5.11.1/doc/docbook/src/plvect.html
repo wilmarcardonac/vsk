@@ -1,0 +1,117 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plvect: Vector plot</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plvasp.html" title="plvasp: Specify viewport using aspect ratio only"><link rel="next" href="plvpas.html" title="plvpas: Specify viewport using coordinates and aspect ratio"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plvect</code>: Vector plot
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plvasp.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plvpas.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plvect: Vector plot"><div class="titlepage"><div><div><h4 class="title"><a name="plvect"></a>
+      <code class="function">plvect</code>: Vector plot
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+            <b class="fsfunc">plvect</b>
+          (</code></td><td>
+            <var class="pdparam">u</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">v</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nx</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ny</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">scale</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">pltr_data</var>
+          <code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Draws a vector plot of the vector
+      <code class="literal">
+        (<em class="parameter"><code>u</code></em>[<em class="parameter"><code>nx</code></em>][<em class="parameter"><code>ny</code></em>],<em class="parameter"><code>v</code></em>[<em class="parameter"><code>nx</code></em>][<em class="parameter"><code>ny</code></em>])
+      </code>.
+      The scaling factor for the vectors is given by
+      <code class="literal">
+        <em class="parameter"><code>scale</code></em>
+      </code>. A
+      transformation routine pointed to by <code class="literal">
+        <em class="parameter"><code>pltr</code></em>
+      </code>
+      with a pointer <code class="literal">
+        <em class="parameter"><code>pltr_data</code></em>
+      </code>
+      for additional data required by the transformation routine
+      is used to map indices within the array
+      to the world coordinates. The style of the vector arrow may be set using
+      <a class="link" href="plsvect.html" title="plsvect: Set arrow style for vector plots"><code class="function">plsvect</code></a>.
+    </p><div class="variablelist"><dl><dt><span class="term">
+          <em class="parameter"><code>u, v</code></em>
+          (<code class="literal">const PLFLT * const *</code>, input)
+        </span></dt><dd><p>
+            Pointers to a pair of vectored two-dimensional arrays
+            containing the x and y components of the vector data to be
+            plotted.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nx, ny</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Physical dimensions of the arrays
+            <code class="literal">
+              <em class="parameter"><code>u</code></em>
+            </code> and
+            <code class="literal">
+              <em class="parameter"><code>v</code></em>
+            </code>.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>scale</code></em>
+          (<code class="literal">PLFLT</code>, input)
+        </span></dt><dd><p>
+            Parameter to control the scaling factor of the vectors for plotting.
+            If <code class="literal">
+              <em class="parameter"><code>scale</code></em> = 0
+            </code> then
+            the scaling factor is automatically calculated for the data.
+            If <code class="literal">
+              <em class="parameter"><code>scale</code></em> &lt; 0
+            </code> then
+            the scaling factor is automatically calculated for the data and
+            then multiplied by <code class="literal">
+              -<em class="parameter"><code>scale</code></em>
+            </code>.
+            If <code class="literal">
+              <em class="parameter"><code>scale</code></em> &gt; 0
+            </code> then
+            the scaling factor is set to <code class="literal">
+              <em class="parameter"><code>scale</code></em>
+            </code>.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr</code></em>
+          (<code class="literal">
+            void (*) (PLFLT, PLFLT, PLFLT *, PLFLT *, PLPointer)
+          </code>, input)
+        </span></dt><dd><p>
+            Pointer to function that defines transformation between indices
+            in array <code class="literal">
+              <em class="parameter"><code>z</code></em>
+            </code> and the
+            world coordinates (C only).  Transformation functions are
+            provided in the PLplot library:
+            <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a> for identity mapping, and <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a> and <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a> for
+            arbitrary mappings respectively defined by one- and
+            two-dimensional arrays.  In addition, user-supplied routines
+            for the transformation can be used as well.  Examples of
+            all of these approaches are given in
+            <a class="xref" href="contour-plots.html#contour-plots-c" title="Contour Plots from C">the section called “Contour Plots from C”</a>.
+            The transformation function should
+            have the form given by any of <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, or <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>pltr_data</code></em>
+          (<code class="literal">PLPointer</code>, input)
+        </span></dt><dd><p>
+            Extra parameter to help
+            pass information to <a class="link" href="pltr0.html" title="pltr0: Identity transformation for grid to world mapping"><code class="function">pltr0</code></a>, <a class="link" href="pltr1.html" title="pltr1: Linear interpolation for grid to world mapping using singly dimensioned coordinate arrays"><code class="function">pltr1</code></a>, <a class="link" href="pltr2.html" title="pltr2: Linear interpolation for grid to world mapping using doubly dimensioned coordinate arrays (column dominant, as per normal C 2d arrays)"><code class="function">pltr2</code></a>, or whatever routine
+            that is externally supplied.
+          </p></dd></dl></div><p>
+      Redacted form: <code class="function">plvect(u, v, scale, pltr, pltr_data)</code>
+    </p><p>
+      This function is used in example 22.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plvasp.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plvpas.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plvasp</code>: Specify viewport using aspect ratio only
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plvpas</code>: Specify viewport using coordinates and aspect ratio
+    </td></tr></table></div></body></html>

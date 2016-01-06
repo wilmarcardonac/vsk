@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Chapter 19. The Specialized C API for PLplot</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="part_reference.html" title="Part IV.  Reference"><link rel="prev" href="plxormod.html" title="plxormod: Enter or leave xor mode"><link rel="next" href="plAlloc2dGrid.html" title="plAlloc2dGrid: Allocate a block of memory for use as a 2-d grid of type PLFLT."></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Chapter 19. The Specialized C API for PLplot</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plxormod.html">Prev</a> </td><th width="60%" align="center">Part IV.  Reference </th><td width="20%" align="right"> <a accesskey="n" href="plAlloc2dGrid.html">Next</a></td></tr></table><hr></div><div class="chapter" title="Chapter 19. The Specialized C API for PLplot"><div class="titlepage"><div><div><h2 class="title"><a name="API-C"></a>Chapter 19. The Specialized C API for PLplot</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="sect1"><a href="API-C.html#plabort">
+      <code class="function">plabort</code>: Error abort
+    </a></span></dt><dt><span class="sect1"><a href="plAlloc2dGrid.html">
+      <code class="function">plAlloc2dGrid</code>: Allocate a block of memory
+    for use as a 2-d grid of type PLFLT.
+    </a></span></dt><dt><span class="sect1"><a href="plClearOpts.html">
+      <code class="function">plClearOpts</code>: Clear internal option table info 
+      structure.
+    </a></span></dt><dt><span class="sect1"><a href="plexit.html">
+      <code class="function">plexit</code>: Error exit
+    </a></span></dt><dt><span class="sect1"><a href="plFree2dGrid.html">
+        <code class="function">plFree2dGrid</code>: Free the memory associated
+	with a 2-d grid allocated using <code class="function">plAlloc2dGrid</code>.
+    </a></span></dt><dt><span class="sect1"><a href="plGetCursor.html">
+      <code class="function">plGetCursor</code>: Wait for graphics input event and translate to world coordinates.
+    </a></span></dt><dt><span class="sect1"><a href="plgfile.html">
+      <code class="function">plgfile</code>: Get output file handle
+    </a></span></dt><dt><span class="sect1"><a href="plMergeOpts.html">
+      <code class="function">plMergeOpts</code>: Merge use option table into
+      internal info structure.
+    </a></span></dt><dt><span class="sect1"><a href="plMinMax2dGrid.html">
+      <code class="function">plMinMax2dGrid</code>: Find the minimum and
+    maximum of a 2d grid allocated using <code class="function">plAlloc2dGrid</code>.
+    </a></span></dt><dt><span class="sect1"><a href="plOptUsage.html">
+      <code class="function">plOptUsage</code>: Print usage and syntax message.
+    </a></span></dt><dt><span class="sect1"><a href="plResetOpts.html">
+      <code class="function">plMergeOpts</code>: Reset internal option table
+      info structure. 
+    </a></span></dt><dt><span class="sect1"><a href="plsabort.html">
+      <code class="function">plsabort</code>: Set abort handler
+    </a></span></dt><dt><span class="sect1"><a href="plSetUsage.html">
+      <code class="function">plSetUsage</code>: Set the strings used in usage
+      and syntax messages.
+    </a></span></dt><dt><span class="sect1"><a href="plsexit.html">
+      <code class="function">plsexit</code>: Set exit handler
+    </a></span></dt><dt><span class="sect1"><a href="plsfile.html">
+      <code class="function">plsfile</code>: Set output file handle
+    </a></span></dt><dt><span class="sect1"><a href="pltr0.html">
+      <code class="function">pltr0</code>: Identity transformation for grid to world
+      mapping
+    </a></span></dt><dt><span class="sect1"><a href="pltr1.html">
+      <code class="function">pltr1</code>: Linear interpolation for grid to world
+      mapping using singly dimensioned coordinate arrays
+    </a></span></dt><dt><span class="sect1"><a href="pltr2.html">
+      <code class="function">pltr2</code>: Linear interpolation for grid to world
+      mapping using doubly dimensioned coordinate arrays (column
+      dominant, as per normal C 2d arrays)
+    </a></span></dt><dt><span class="sect1"><a href="PLGraphicsIn.html"><span class="structname">PLGraphicsIn</span>: PLplot Graphics Input structure</a></span></dt><dt><span class="sect1"><a href="PLOptionTable.html"><span class="structname">PLOptionTable</span>: PLplot command line options table structure</a></span></dt></dl></div><p>
+    The purpose of this chapter is to document the PLplot C functions that are
+    currently not part of the common API, 
+    either because they are C/C++ specific utility 
+    functions (e.g. <a class="link" href="plAlloc2dGrid.html" title="plAlloc2dGrid: Allocate a block of memory for use as a 2-d grid of type PLFLT."><code class="function">plAlloc2dGrid</code></a>, <a class="link" href="plFree2dGrid.html" title="plFree2dGrid: Free the memory associated with a 2-d grid allocated using plAlloc2dGrid."><code class="function">plFree2dGrid</code></a>) or because they are not
+    easily implemented in other languages (e.g. <a class="link" href="plGetCursor.html" title="plGetCursor: Wait for graphics input event and translate to world coordinates."><code class="function">plGetCursor</code></a>). Some of these 
+    functions are used in the examples and may be helpful for other users of 
+    plplot.
+  </p><p>
+    This chapter also documents some of the data types and structures 
+    defined by plplot and used by the functions.
+  </p><div class="sect1" title="plabort: Error abort"><div class="titlepage"><div><div><h4 class="title"><a name="plabort"></a>
+      <code class="function">plabort</code>: Error abort
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+	    <b class="fsfunc">plabort</b>
+	  (</code></td><td><var class="pdparam">message</var><code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      This routine is to be used when something goes wrong that doesn't
+      require calling <a class="link" href="plexit.html" title="plexit: Error exit"><code class="function">plexit</code></a> but for which there is no useful recovery.
+      It calls the abort handler defined via <a class="link" href="plsabort.html" title="plsabort: Set abort handler"><code class="function">plsabort</code></a>, does some cleanup
+      and returns. The user can supply his/her own abort handler and pass it
+      in via <a class="link" href="plsabort.html" title="plsabort: Set abort handler"><code class="function">plsabort</code></a>.
+    </p><div class="variablelist"><dl><dt><span class="term">
+	  <em class="parameter"><code>message</code></em>
+	  (<code class="literal">char *</code>, input)
+	</span></dt><dd><p>
+	    Abort message.
+	  </p></dd></dl></div><p>
+      This function is currently available in C, f95 and python.
+    </p><p>
+      This function is used in example 20.
+    </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plxormod.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="part_reference.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plAlloc2dGrid.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plxormod</code>: Enter or leave xor mode
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plAlloc2dGrid</code>: Allocate a block of memory
+    for use as a 2-d grid of type PLFLT.
+    </td></tr></table></div></body></html>

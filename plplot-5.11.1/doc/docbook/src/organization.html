@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Organization of this Manual</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="intro.html" title="Chapter 1. Introduction"><link rel="prev" href="installing.html" title="Installing and Using the PLplot Library"><link rel="next" href="copyrights.html" title="Copyrights"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Organization of this Manual</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="installing.html">Prev</a> </td><th width="60%" align="center">Chapter 1. Introduction</th><td width="20%" align="right"> <a accesskey="n" href="copyrights.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Organization of this Manual"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="organization"></a>Organization of this Manual</h2></div></div></div><p>
+      The PLplot library has been designed so that it is easy to write
+      programs producing graphical output without having to set up large
+      numbers of parameters.  However, more precise control of the results
+      may be necessary, and these are accommodated by providing lower-level
+      routines which change the system defaults.  The manual first describes
+      the overall process of producing a graph using the high-level
+      routines (see <a class="xref" href="simple.html#simple-graph" title="Plotting a Simple Graph">the section called “Plotting a Simple Graph”</a>).  For a discussion of
+      the underlying concepts of the plotting process and an introduction
+      to some of the more complex routines (see <a class="xref" href="advanced.html" title="Chapter 3. Advanced Use of PLplot">Chapter 3, <i>Advanced Use of PLplot</i></a>).
+      An alphabetical list of the user-accessible PLplot functions with
+      detailed descriptions is given in the reference section of the manual
+      (see <a class="xref" href="API.html" title="Chapter 18. The Common API for PLplot">Chapter 18, <i>The Common API for PLplot</i></a>).
+    </p><p>
+      Because the PLplot kernel is written in C, standard C syntax is used
+      in the description of each PLplot function. If you have difficulty
+      interpreting the call syntax as described in this manual, please refer
+      to part III, Language Bindings. This manual includes:
+      C (<a class="xref" href="c.html" title="Chapter 8. C Language">Chapter 8, <i>C Language</i></a>), 
+      C++ (<a class="xref" href="cplusplus.html" title="Chapter 9. A C++ Interface for PLplot">Chapter 9, <i>A C++ Interface for PLplot</i></a>), 
+      Fortran 95 (<a class="xref" href="fortran95.html" title="Chapter 10. Fortran 95 Language">Chapter 10, <i>Fortran 95 Language</i></a>), 
+      Java (???),
+      Tcl (<a class="xref" href="tcl.html" title="Chapter 14. Using PLplot from Tcl">Chapter 14, <i>Using PLplot from Tcl</i></a>),
+      Perl (<a class="xref" href="perl.html" title="Chapter 12. Using PLplot from Perl">Chapter 12, <i>Using PLplot from Perl</i></a>) and
+      Python (<a class="xref" href="python.html" title="Chapter 13. Using PLplot from Python">Chapter 13, <i>Using PLplot from Python</i></a>). Since PLplot has a long
+      history, bindings to your language of choice are probably available
+      though not necessarily in the PLplot distribution. It is a good idea
+      to ask around and do a quick search before rolling your own.
+    </p><p>
+      The meaning of the function (subroutine)
+      arguments is typically the same regardless of what language you are
+      using to call PLplot (but there are some exceptions to this).  The
+      arguments for each function are usually specified in terms of PLBOOL,
+      PLINT,and PLFLT—these are the internal PLplot representations for
+      logical, integer, and floating point, and are typically a zero (false) or
+      non-zero (true) contained in a long, a long, and a float (or
+      a LOGICAL, INTEGER, and a REAL, for Fortran programmers).  See
+      <a class="xref" href="c.html" title="Chapter 8. C Language">Chapter 8, <i>C Language</i></a> for more detail.
+    </p><p>
+      Most of the output devices supported by PLplot are listed in
+      <a class="xref" href="x-drivers.html" title="Chapter 5. The PLplot Display Driver Family">Chapter 5, <i>The PLplot Display Driver Family</i></a> and <a class="xref" href="output-drivers.html" title="Chapter 6. The PLplot Output Driver Family">Chapter 6, <i>The PLplot Output Driver Family</i></a>, 
+      along with description of the device driver--PLplot interface, 
+      metafile output, family files, and vt100/tek4010 emulators.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="installing.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="intro.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="copyrights.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Installing and Using the PLplot Library </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Copyrights</td></tr></table></div></body></html>

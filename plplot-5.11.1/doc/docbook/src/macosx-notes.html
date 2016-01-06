@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>Mac OS X Notes</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="os-notes.html" title="Chapter 24. Notes for each Operating System that We Support"><link rel="prev" href="windows-notes.html" title="Windows Notes"><link rel="next" href="libraries.html" title="Chapter 25. The PLplot Libraries"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Mac OS X Notes</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="windows-notes.html">Prev</a> </td><th width="60%" align="center">Chapter 24. Notes for each Operating System that We Support</th><td width="20%" align="right"> <a accesskey="n" href="libraries.html">Next</a></td></tr></table><hr></div><div class="sect1" title="Mac OS X Notes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="macosx-notes"></a>Mac OS X Notes</h2></div></div></div><p>
+      PLplot has been tested with Mac OS X 10.8 and 10.9 using the
+      Apple LLVM version 6.0 compiler provided by XCode 6.1.1.  CMake
+      must be installed in order to build PLplot and version 3.1.3
+      from MacPorts has been tested.
+    </p><p>
+      If language bindings (e.g. Python) are needed, PLplot has been
+      tested with the ports from MacPorts.  When using MacPorts, there
+      is a secondary dependency that occurs if SWIG is installed.  For
+      example, if python is installed from MacPorts, swig-python must
+      also be installed.
+    </p><p>
+      If both XQuartz and the xorg-libX11 port is installed, CMake may
+      fail to configure PLplot correctly and the build will fail.  If
+      this occurs, use the following CMake command string.
+      </p><pre class="programlisting">
+	cmake -DX11_X11_LIB=/opt/X11/lib/libX11.dylib \
+	  -DX11_X11_INCLUDE_PATH=/opt/X11/include -DENABLE_tk=OFF \
+	  &lt;path-to-source-tree&gt; &gt;&amp; cmake.out
+      </pre><p>
+    </p><div class="sect2" title="Mac OS X Configure and Build"><div class="titlepage"><div><div><h3 class="title"><a name="idp25251168"></a>Mac OS X Configure and Build</h3></div></div></div><p>
+	The build process for Mac OS X follows the same basic steps
+	used Linux and Unix platforms.  
+      </p><p>
+	The following steps will configure and build PLplot on Mac OS
+	X that do not have the XQuartz and xorg-libX11 conflict.
+	</p><pre class="programlisting">
+	  # Note many other cmake options are available besides -DCMAKE_INSTALL_PREFIX
+	  # Inspect CMakeCache.txt after a preliminary cmake run to see an annotated
+	  # list of the available options.  Then remove CMakeCache.txt and try again.
+	  cmake -DCMAKE_INSTALL_PREFIX=&lt;install-prefix&gt; \
+	  &lt;path-to-source-tree&gt; &gt;&amp; cmake.out
+	  make &gt;&amp; make.out
+	  #(optional, requires -DBUILD_TEST=ON option for cmake)
+	  ctest &gt;&amp; ctest.out
+	  make install &gt;&amp; make_install.out
+	  cd &lt;install-prefix&gt;/share/plplot&lt;version&gt;/examples/
+	  make &gt;&amp; make_examples.out
+	  ./plplot-test.sh &gt;&amp; plplot-test.sh.out
+	</pre><p>
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="windows-notes.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="os-notes.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="libraries.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">Windows Notes </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> Chapter 25. The PLplot Libraries</td></tr></table></div></body></html>

@@ -1,0 +1,176 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>plfsurf3d: Plot shaded 3-d surface plot</title><link rel="stylesheet" type="text/css" href="stylesheet.css"><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"><link rel="home" href="index.html" title="The PLplot Plotting Library"><link rel="up" href="API.html" title="Chapter 18. The Common API for PLplot"><link rel="prev" href="plsurf3dl.html" title="plsurf3dl: Plot shaded 3-d surface plot for z[x][y] with y index limits"><link rel="next" href="plsvect.html" title="plsvect: Set arrow style for vector plots"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">
+      <code class="function">plfsurf3d</code>: Plot shaded 3-d surface plot
+    </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="plsurf3dl.html">Prev</a> </td><th width="60%" align="center">Chapter 18. The Common API for PLplot</th><td width="20%" align="right"> <a accesskey="n" href="plsvect.html">Next</a></td></tr></table><hr></div><div class="sect1" title="plfsurf3d: Plot shaded 3-d surface plot"><div class="titlepage"><div><div><h4 class="title"><a name="plfsurf3d"></a>
+      <code class="function">plfsurf3d</code>: Plot shaded 3-d surface plot
+    </h4></div></div></div><p>
+      </p><div class="funcsynopsis"><table border="0" summary="Function synopsis" cellspacing="0" cellpadding="0" class="funcprototype-table"><tr><td><code class="funcdef">
+            <b class="fsfunc">plfsurf3d</b>
+          (</code></td><td>
+            <var class="pdparam">x</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">y</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">zops</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">zp</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nx</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">ny</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">opt</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">clevel</var>
+          , </td></tr><tr><td> </td><td>
+            <var class="pdparam">nlevel</var>
+          <code>)</code>;</td></tr></table><div class="funcprototype-spacer"> </div></div><p>
+    </p><p>
+      Plots a three dimensional shaded surface plot within the environment set up
+      by <a class="link" href="plw3d.html" title="plw3d: Set up window for 3-d plotting"><code class="function">plw3d</code></a>. The surface is defined by the data contained in the 2D
+      <code class="literal">const PLFLT * const *</code> matrix or the <code class="literal">PLfGrid2</code> structure
+      <code class="literal">
+        <em class="parameter"><code>zp</code></em>
+      </code>. How the data in
+      <code class="literal">
+        <em class="parameter"><code>zp</code></em>
+      </code> is rendered is determined by the
+      <code class="literal">
+        <em class="parameter"><code>zops</code></em>
+      </code> parameter.
+      <code class="literal">
+        <em class="parameter"><code>zops</code></em>
+      </code> is a pointer to a function
+      that reads the data out of the grid structure. The following functions in
+      PLplot core will return an appropriate function pointer:
+      <code class="literal">plf2ops_c()</code> (use when
+      <code class="literal">
+        <em class="parameter"><code>zp</code></em>
+      </code> is of type
+      <code class="literal">const PLFLT * const *</code>),
+      <code class="literal">plf2ops_grid_c()</code> (use when
+      <code class="literal">
+        <em class="parameter"><code>zp</code></em>
+      </code>
+      is a pointer to a row-major <code class="literal">PLfGrid2</code> structure),
+      <code class="literal">plf2ops_grid_row_major()</code>
+      (same as <code class="literal">plf2ops_grid_c()</code>?) and
+      <code class="literal">plf2ops_grid_col_major()</code>
+      (use when <code class="literal">
+        <em class="parameter"><code>zp</code></em>
+      </code> is a pointer to a
+      column-major <code class="literal">PLfGrid2</code> structure).
+      <code class="literal">
+        <em class="parameter"><code>nx</code></em>
+      </code>,
+      <code class="literal">
+        <em class="parameter"><code>ny</code></em>
+      </code>
+      <code class="literal">
+        <em class="parameter"><code>opt</code></em>
+      </code>
+      <code class="literal">
+        <em class="parameter"><code>clevel</code></em>
+      </code> and
+      <code class="literal">
+        <em class="parameter"><code>nlevel</code></em>
+      </code> are the same as in
+      for example <a class="link" href="plsurf3d.html" title="plsurf3d: Plot shaded 3-d surface plot"><code class="function">plsurf3d</code></a>.
+    </p><div class="variablelist"><dl><dt><span class="term">
+          <em class="parameter"><code>x</code></em>
+          (<code class="literal">const PLFLT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to set of x coordinate values at which the function is
+            evaluated.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>y</code></em>
+          (<code class="literal">const PLFLT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to set of y coordinate values at which the function is
+            evaluated.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>zops</code></em>
+          (<code class="literal">PLF2OPS</code>, input)
+        </span></dt><dd><p>
+            Pointer to a function for processing the data contained in zp.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>zp</code></em>
+          (<code class="literal">PLPointer</code>, input)
+        </span></dt><dd><p>
+            Pointer to the data to be plotted, either as a vectored
+            two-dimensional array with set of function values or as
+            a PLfGrid2 structure.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nx</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Number of <code class="literal">
+              <em class="parameter"><code>x</code></em>
+            </code> values at
+            which function is evaluated.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>ny</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Number of <code class="literal">
+              <em class="parameter"><code>y</code></em>
+            </code> values at
+            which function is evaluated.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>opt</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Determines the way in which the surface is represented. To specify
+            more than one option just add the options, e.g. FACETED + SURF_CONT
+            </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+                  <code class="literal">
+                    <em class="parameter"><code>opt</code></em>=FACETED
+                  </code>: Network
+                  of lines is drawn connecting points at which function is
+                  defined.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">
+                    <em class="parameter"><code>opt</code></em>=BASE_CONT
+                  </code>: A contour
+                  plot is drawn at the base XY plane using parameters
+                  <em class="parameter"><code>nlevel</code></em> and <em class="parameter"><code>clevel</code></em>.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">
+                    <em class="parameter"><code>opt</code></em>=SURF_CONT
+                  </code>: A contour
+                  plot is drawn at the surface plane using parameters
+                  <em class="parameter"><code>nlevel</code></em> and <em class="parameter"><code>clevel</code></em>.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">
+                    <em class="parameter"><code>opt</code></em>=DRAW_SIDES
+                  </code>: draws a curtain
+                  between the base XY plane and the borders of the plotted function.
+                </p></li><li class="listitem"><p>
+                  <code class="literal">
+                    <em class="parameter"><code>opt</code></em>=MAG_COLOR
+                  </code>:
+                  the surface is colored according to the value of Z; if
+                  <code class="literal">MAG_COLOR</code> is not used, then the default
+                  the surface is colored according to the intensity of the
+                  reflected light in the surface from a light source whose
+                  position is set using <a class="link" href="pllightsource.html" title="pllightsource: Sets the 3D position of the light source"><code class="function">pllightsource</code></a>.
+                </p></li></ul></div><p>
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>clevel</code></em>
+          (<code class="literal">const PLFLT *</code>, input)
+        </span></dt><dd><p>
+            Pointer to the array that defines the contour level spacing.
+          </p></dd><dt><span class="term">
+          <em class="parameter"><code>nlevel</code></em>
+          (<code class="literal">PLINT</code>, input)
+        </span></dt><dd><p>
+            Number of elements in the <code class="literal">clevel</code> array.
+          </p></dd></dl></div><p>
+      Redacted form? <code class="function">plfsurf3d(x, y, zops, zp, opt, clevel)</code>
+    </p><p>
+      This function is used in example 8.
+    </p></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="plsurf3dl.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="API.html">Up</a></td><td width="40%" align="right"> <a accesskey="n" href="plsvect.html">Next</a></td></tr><tr><td width="40%" align="left" valign="top">
+      <code class="function">plsurf3dl</code>: Plot shaded 3-d surface plot for
+      z[x][y] with y index limits
+     </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> 
+      <code class="function">plsvect</code>: Set arrow style for vector plots
+    </td></tr></table></div></body></html>
