@@ -28,12 +28,13 @@ Module fiducial
     Integer*4,parameter :: UNIT_SYNFAST_PAR_FILE = 91   ! UNIT NUMBER FOR FILE
 
     Logical,parameter   :: do_cmb_simulations = .false. ! DO CMB SIMULATIONS IF SET IT TRUE
+    Logical,parameter   :: compute_vsk_maps = .true.    ! COMPUTE V,S,K MAPS IF SET IT TRUE
 
     Character(len=*),parameter :: infile = './cmb_angular_power_spectrum/planck2015_lcdm_cl_v2.fits'    ! PATH TO SEED CMB ANGULAR POWER SPECTRUM
     Character(len=*),parameter :: beam_file = " '' "    ! PATH TO BEAM FILE
     Character(len=*),parameter :: almsfile = " '' "     ! PATH ALMS FILE
     Character(len=*),parameter :: plmfile = " '' "      ! PATH TO PLM FILE
-    Character(len=*),parameter :: ORDERING_VSK_MAPS = 'NESTED'    ! PATH TO TEMPORARY GAUSSIAN CMB MAP
+    Character(len=*),parameter :: ORDERING_VSK_MAPS = 'RING'!'NESTED'    ! PATH TO TEMPORARY GAUSSIAN CMB MAP
     Character(len=*),parameter :: outfile_alms = " '' "    ! PATH TO ALMS OUTPUT FILE 
     Character(len=*),parameter :: PATH_TO_SYNFAST_PARAMETER_FILE = './synfast_parameter_files/g_cmb_' ! PATH TO DATA OF TABLE 2 IN R11
     Character(len=*),parameter :: PATH_TO_CMB_MAPS = './cmb_maps/map_g_' ! PATH TO DATA OF TABLE 2 IN R11

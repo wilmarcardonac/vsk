@@ -12,6 +12,7 @@ Program vsk
   use fiducial
   use arrays
   use functions 
+  use fgsl
 
   !#################################
   ! DECLARE VARIABLES AND PARAMETERS
@@ -21,9 +22,12 @@ Program vsk
     
   Integer*4 :: m                                   ! INTERGER FOR SHORT LOOPS 
 
-!!$    Real*8 :: random_uniform                           ! SAVES RANDOM UNIFORM DEVIATE BETWEEN 0 AND 1 
-  
+!  Real*8,dimension(5) :: array                           ! SAVES RANDOM UNIFORM DEVIATE BETWEEN 0 AND 1 
+!  Real*8 :: var
 !!$    Logical,dimension(number_of_parameters) :: plausibility  
+
+
+  Character(len=4) :: x
 
 !  Character(len=80),dimension(1:60) :: header
 
@@ -39,7 +43,7 @@ Program vsk
 
   c = n/npixC     ! NUMBER OF CMB PIXELS PER CELL
 
-  fr = nint(c*0.9) ! FRACTION OF PIXELS TO DETERMINE UNMASKED CELLS
+  fr = nint(c*0.8) ! FRACTION OF PIXELS TO DETERMINE UNMASKED CELLS
 
   allocate (cmbmask(0:n-1,1:nmasks),planckmap(0:n-1,1:ncmbmaps), stat = status1)
 
@@ -47,9 +51,9 @@ Program vsk
 
   call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
 
-!  call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED
+  call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED
 
- ! call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
+  call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
 
   open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
     
@@ -69,7 +73,23 @@ Program vsk
 
   End If
 
-  call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim('0001')//'.fits')
+  If (compute_vsk_maps) then
+
+     call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
+
+     Do m = 1,number_of_cmb_simulations
+
+        write(x,fmt) m
+
+        call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim(x)//'.fits',x)
+
+     End Do
+
+  Else
+
+     continue 
+
+  End If
 
   deallocate(cmbmask,planckmap)
 
