@@ -95,8 +95,11 @@ contains
     Implicit none
 
     Integer*4 :: m
+    Integer*8 :: d,i,f,j,f2 ! NUMBERS OF PIXELS CMB MAPS
+    Integer*8, allocatable, dimension(:) :: indexc 
 
     Real*8, allocatable, dimension(:,:) :: vmap,kmap,smap,cmbmapa,cmbmapb,kmap2,kmap3
+    Real*8, allocatable, dimension(:) :: pcmb,pcmb2
 
     Character(len=*) :: PATH_TO_CMB_MAP
     Character(len=80),dimension(1:60) :: header,headercmb
@@ -134,99 +137,91 @@ contains
 
        call udgrade_nest(kmap3,2,kmap2,2048)  ! CHANGES RESOLUTION OF K AUXILIARY MAP TO THAT OF CMB MAP 
 
-!       call output_map(kmap3,header,'./output/kmap3.fits')
+       !       call output_map(kmap3,header,'./output/kmap3.fits')
 
- !      call output_map(kmap2,headercmb,'./output/kmap2.fits')
+       !      call output_map(kmap2,headercmb,'./output/kmap2.fits')
 
-  !     stop
-       !#################################################################################
-       !#################################################################################
-       ! We allocate some memory for an array that will store indices of the current cell
-       !#################################################################################
-       !################################################################################# 
+       allocate (indexc(0:c-1), stat = status4) ! USED TO STORE INDICES OF CURRENT CELL
 
-!!$       allocate (indexc(0:c-1), stat = status4) ! INDICES OF CURRENT CELL
-!!$
-!!$       print *, 'Memory allocated successfully '
-!!$
-!!$       !#######################################################
-!!$       !#######################################################
-!!$       ! We assign values to the array of indices created above
-!!$       !#######################################################
-!!$       !#######################################################
-!!$
-!!$       d = 0
-!!$
-!!$       Do i=0,n-1
-!!$          If (kmap2(i,1) == 1.d0) then
-!!$             indexc(d) = i
-!!$             d=d+1
-!!$          Else 
-!!$             continue
-!!$          End if
-!!$       End Do
-!!$
-!!$       print *,'Indices assigned successfully '
-!!$
-!!$       !#####################################################################
-!!$       !#####################################################################
-!!$       ! We allocate memory for the array of cmb data inside the current cell
-!!$       !#####################################################################
-!!$       !#####################################################################
-!!$
-!!$       allocate (pcmb(0:c-1), stat = status5)
-!!$
-!!$       !#########################################################################################################
-!!$       !#########################################################################################################
-!!$       ! We assign cmb data inside the current cell to the array created above. Also we count how many pixels are
-!!$       ! non zero
-!!$       !#########################################################################################################
-!!$       !#########################################################################################################
-!!$
-!!$       f=0
-!!$
-!!$       Do i=0,c-1 
-!!$          pcmb(i) = cmbmapb(indexc(i),1)
-!!$          If (pcmb(i) /= 0.d0) then 
-!!$             f = f + 1
-!!$          Else
-!!$             continue
-!!$          End if
-!!$       End Do
-!!$
-!!$       print *, 'Number of pixels with non-zero value in cell ', m+1,' is: ', f
-!!$
-!!$       !#################################
-!!$       !#################################
-!!$       ! Criterium to accept cells is set
-!!$       !#################################
-!!$       !################################# 
-!!$
-!!$       If (f < fr) then 
-!!$          print *, 'Number of points too low in cell ', m+1, ', assigning zero to current cell...'
-!!$          ! We assign zero value to the current cell and create mask for K,V and S maps 
+       d = 0   ! COUNTS PIXELS WHICH EQUAL ONE IN CURRENT CELL
+
+       Do i = 0,n-1                                                
+                                          
+          If (kmap2(i,1:1) .eq. miss) then 
+
+             continue
+
+          Else  ! ASSIGN VALUES OF INDICES IN CURRENT CELL (CORRESPONDING TO CMB NSIDE)
+
+             indexc(d) = i
+
+             d = d +1
+
+          End if
+
+       End Do
+
+       allocate (pcmb(0:c-1), stat = status5)
+
+       f = 0   ! COUNTS NON-ZERO PIXELS IN CURRENT CELL
+
+       Do i = 0,c-1
+ 
+          pcmb(i) = cmbmapa(indexc(i),1:1)
+
+          If (pcmb(i) .eq. 0.d0) then 
+
+             continue
+
+          Else
+
+             f = f + 1
+
+          End if
+
+       End Do
+ 
+       If (f .lt. fr) then ! REJECT CURRENT CELL 
+
 !!$          kmap(m,1:1) = 0.d0
+
 !!$          smap(m,1:1) = 0.d0
-!!$          vmap(m,1:1) = 0.d0
+
+          vmap(m,1:1) = miss 
+
 !!$          !    mask(m,1:1) = 0.d0
 !!$          !  continue
-!!$       else
-!!$          allocate (pcmb2(0:f-1),stat = status6)
-!!$          j = 0
-!!$          Do i=0,c-1
-!!$             If (pcmb(i) /= 0.d0) then
-!!$                pcmb2(j) = pcmb(i)
-!!$                j = j + 1
-!!$             Else
-!!$                continue
-!!$             End If
-!!$          End Do
+
+       Else
+
+          allocate (pcmb2(0:f-1),stat = status6)
+
+          j = 0
+
+          Do i=0,c-1
+
+             If (pcmb(i) .eq. 0.d0) then
+
+                continue
+
+             Else
+
+                pcmb2(j) = pcmb(i)
+
+                j = j + 1
+
+             End If
+
+          End Do
+
 !!$          print *, 'Computing sample kurtosis, sample skewness and unbiased sample variance in cell ', m+1,'...'
 !!$          kmap(m,1:1) = kurtosis(pcmb2)
 !!$          smap(m,1:1) = skewness(pcmb2)
-!!$          vmap(m,1:1) = variance(pcmb2)
-!!$          deallocate(pcmb2,stat = status6)
-!!$       end if
+          call variance(pcmb2,vmap(m,1:1))
+
+          deallocate(pcmb2,stat = status6)
+
+       End if
 !!$
 !!$       !##########################################################################################
 !!$       !##########################################################################################
@@ -306,5 +301,25 @@ contains
     deallocate(vmap,kmap,smap,cmbmapa,cmbmapb,kmap2,kmap3)
 
   End Subroutine compute_variance_skewness_kurtosis_maps
+
+  Subroutine variance(array,var)
+
+    use fgsl
+    use mod_unit
+
+    Implicit none
+
+    Integer(fgsl_size_t),parameter :: nsize = size(array)
+
+    Real(fgsl_double) :: array(nsize)
+    Real(fgsl_double) :: var
+    
+    call unit_init(200)
+
+    var = fgsl_stats_variance(array,1_fgsl_size_t,nsize)
+
+    call unit_finalize()
+    
+  End Subroutine variance
 
 End module functions
