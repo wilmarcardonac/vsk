@@ -82,6 +82,172 @@ contains
 
   End subroutine write_parameter_file_synfast
 
+  Subroutine compute_vsk_angular_power_spectra()
+
+    use healpix_types
+    use pix_tools, only: nside2npix
+    use fitstools, only: getsize_fits, input_map, output_map
+    use arrays
+    use fiducial
+
+    Implicit none
+
+    Integer*4 :: p
+
+    Character(len=4) :: x
+
+    Do p=1,number_of_cmb_simulations
+
+       write(x,fmt) p
+
+       call write_parameter_file_polspice(p,'V')
+
+       call write_parameter_file_polspice(p,'S')
+
+       call write_parameter_file_polspice(p,'K')
+
+       call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+            ''//trim('vmap')//'_'//trim(x)//'.spicerc')
+
+       call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+            ''//trim('smap')//'_'//trim(x)//'.spicerc')
+
+
+       call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+            ''//trim('kmap')//'_'//trim(x)//'.spicerc')
+
+    End Do
+
+  End subroutine compute_vsk_angular_power_spectra
+
+  Subroutine write_parameter_file_polspice(iseed,map_type)
+
+    use fiducial
+    Implicit none
+
+    Integer*4 :: iseed
+
+    Character(len=4) :: x,y
+    Character(len=1) :: map_type   ! IT CAN ONLY TAKE VALUES 'V','S',AND 'K'
+
+    write(x,fmt) iseed
+
+    If (iseed .eq. 0) then
+
+       If (map_type .eq. 'V') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('vmap_smica')//'.spicerc')
+
+       Else If (map_type .eq. 'S') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('smap_smica')//'.spicerc')
+
+       Else If (map_type .eq. 'K') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('kmap_smica')//'.spicerc')
+
+       Else
+
+          print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+          stop
+
+       End If
+
+    Else
+
+       If (map_type .eq. 'V') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('vmap')//'_'//trim(x)//'.spicerc')
+
+       Else If (map_type .eq. 'S') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('smap')//'_'//trim(x)//'.spicerc')
+
+       Else If (map_type .eq. 'K') then
+
+          open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('kmap')//'_'//trim(x)//'.spicerc')
+
+       Else
+
+          print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+          stop
+
+       End If
+
+    End If
+
+    write(UNIT_SYNFAST_PAR_FILE,*) 'beam = ', sqrt(3.d0/Pi)*3600.d0/dble(nsideC)*3.d0
+
+    If (iseed .eq. 0) then
+
+       If (map_type .eq. 'V') then
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl_smica.cl')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_vsmica.cor')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_smica.fits'
+
+       Else if (map_type .eq. 'S') then
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl_smica.cl')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ssmica.cor')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_smica.fits'
+
+       Else
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl_smica.cl')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ksmica.cor')//''
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_smica.fits'
+
+       End If
+
+    Else
+
+       If (map_type .eq. 'V') then
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.cl'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('corv')//'_'//trim(x)//'.cor'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_'//trim(x)//'.fits'
+
+       Else if (map_type .eq. 'S') then
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.cl'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cors')//'_'//trim(x)//'.cor'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_'//trim(x)//'.fits'
+
+       Else
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.cl'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cork')//'_'//trim(x)//'.cor'
+
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_'//trim(x)//'.fits'
+
+       End If
+
+    End If
+
+    write(UNIT_SYNFAST_PAR_FILE,*) 'maskfile = ', PATH_TO_VSK_MASK
+
+    write(y,fmt) nsideC 
+
+    write(UNIT_SYNFAST_PAR_FILE,*) 'pixelfile = ', PATH_TO_HEALPIX_DATA//trim('/pixel_window_')//'n'//trim(y)//'.fits'
+
+    close(UNIT_SYNFAST_PAR_FILE)
+
+  End subroutine write_parameter_file_polspice
+
   Subroutine compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAP,x)
 
     use healpix_types
@@ -238,11 +404,11 @@ contains
 
     If (computing_data) then 
 
-       call output_map(vmap,header,'./vsk_maps/vmap_'//trim('smica')//'.fits')
+       call output_map(vmap,header,'./vsk_maps/vmap_smica.fits')
 
-       call output_map(smap,header,'./vsk_maps/smap_'//trim('smica')//'.fits')
+       call output_map(smap,header,'./vsk_maps/smap_smica.fits')
 
-       call output_map(kmap,header,'./vsk_maps/kmap_'//trim('smica')//'.fits')
+       call output_map(kmap,header,'./vsk_maps/kmap_smica.fits')
 
     Else
 

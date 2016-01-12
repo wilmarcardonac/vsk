@@ -29,7 +29,7 @@ Program vsk
 
   Character(len=4) :: x
 
-!  Character(len=80),dimension(1:60) :: header
+  Character(len=80),dimension(1:60) :: header
 
 !  Real*8, allocatable, dimension(:,:) :: maptest
 
@@ -51,9 +51,19 @@ Program vsk
 
   call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
 
+  call write_minimal_header(header, 'MAP', nside = nsmax, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
+
+  call output_map(cmbmask(0:n-1,1:1),header,'ut78.fits')
+
   call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED
 
   call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
+
+  call write_minimal_header(header, 'MAP', nside = nsmax, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
+
+  call output_map(planckmap(0:n-1,1:1),header,'smica.fits')
+
+  stop
 
   open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
     
@@ -75,15 +85,41 @@ Program vsk
 
   If (compute_vsk_maps) then
 
-     call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
+!     call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
 
-     Do m = 1,number_of_cmb_simulations
+!     Do m = 1,number_of_cmb_simulations
 
-        write(x,fmt) m
+ !       write(x,fmt) m
 
-        call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim(x)//'.fits',x)
+  !      call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim(x)//'.fits',x)
 
-     End Do
+   !  End Do
+
+  Else
+
+     continue 
+
+  End If
+
+  If (compute_vsk_angular_power_spectrum) then
+
+     call write_parameter_file_polspice(0,'V')
+
+     call write_parameter_file_polspice(0,'S')
+
+     call write_parameter_file_polspice(0,'K')
+
+     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+          ''//trim('vmap_smica')//'.spicerc')
+
+     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+          ''//trim('smap_smica')//'.spicerc')
+
+     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+          ''//trim('kmap_smica')//'.spicerc')
+
+     stop
+     call compute_vsk_angular_power_spectra()
 
   Else
 
