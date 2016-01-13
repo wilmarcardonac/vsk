@@ -22,15 +22,16 @@ Program vsk
     
   Integer*4 :: m                                   ! INTERGER FOR SHORT LOOPS 
 
-  Real*8,dimension(0:3) :: multipoles              ! SAVES MONOPOLE AND DIPOLE OF CMB MAP 
-  Real*8,dimension(1:2) :: zbounds                 ! BOUNDS TO COMPUTE DIPOLE AND MONOPOLE
+  Real(kind=DP),dimension(0:DEGREE_REMOVE_DIPOLE*DEGREE_REMOVE_DIPOLE-1) :: multipoles              ! SAVES MONOPOLE AND DIPOLE OF CMB MAP 
+  Real(kind=DP),dimension(1:2) :: zbounds                 ! BOUNDS TO COMPUTE DIPOLE AND MONOPOLE
+
 !!$    Logical,dimension(number_of_parameters) :: plausibility  
 
   Character(len=4) :: x
 
-  Character(len=80),dimension(1:60) :: header
+!  Character(len=80),dimension(1:60) :: header
 
-!  Real*8, allocatable, dimension(:,:) :: maptest
+!  Real(kind=DP), dimension(0:2048-1) :: maptest
 
   !############################
   ! INITIALIZATION OF VARIABLES
@@ -52,21 +53,17 @@ Program vsk
 
   call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
 
-!  call write_minimal_header(header, 'MAP', nside = nsmax, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
-
-!  call output_map(cmbmask(0:n-1,1:1),header,'ut78.fits')
-
-  call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED
+  call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
 
   call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
 
-!  call write_minimal_header(header, 'MAP', nside = nsmax, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
-
-!  call output_map(planckmap(0:n-1,1:1),header,'smica.fits')
-
-  call remove_dipole(nsmax,planckmap(0:n-1,1),1,2,multipoles,zbounds,cmbmask(0:n-1,1))
+  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
   open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
+
+  write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
+
+  write(UNIT_EXE_FILE,*) 'MONOPOLE AND DIPOLE GIVEN BY HEALPIX SUBROUTINE FOR PLANCK MAP ', multipoles
     
   !#################################################
   ! GENERATE GAUSSIAN CMB SIMULATIONS (IF NECESSARY)
@@ -102,11 +99,15 @@ Program vsk
 
   End If
 
-  call compute_vsk_mean_maps()
+  If (compute_mean_vsk_maps)  then
 
-  ! mkdir vsk_maps_zero_mean
+     call compute_vsk_mean_maps()
 
-  ! Subroutine : input_map -> subtract mean -> output_map
+  Else
+
+     continue
+
+  End If
 
   ! change target directory in subroutines below
 
@@ -127,7 +128,6 @@ Program vsk
      call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
           ''//trim('kmap_smica')//'.spicerc')
 
-     stop
      call compute_vsk_angular_power_spectra()
 
   Else

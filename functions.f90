@@ -188,7 +188,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_vsmica.cor')//''
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_smica.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/vmap_smica.fits'
 
        Else if (map_type .eq. 'S') then
 
@@ -196,7 +196,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ssmica.cor')//''
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_smica.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/smap_smica.fits'
 
        Else
 
@@ -204,7 +204,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ksmica.cor')//''
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_smica.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/kmap_smica.fits'
 
        End If
 
@@ -216,7 +216,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('corv')//'_'//trim(x)//'.cor'
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_'//trim(x)//'.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/vmap_'//trim(x)//'.fits'
 
        Else if (map_type .eq. 'S') then
 
@@ -224,7 +224,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cors')//'_'//trim(x)//'.cor'
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_'//trim(x)//'.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/smap_'//trim(x)//'.fits'
 
        Else
 
@@ -232,7 +232,7 @@ contains
 
           write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cork')//'_'//trim(x)//'.cor'
 
-          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_'//trim(x)//'.fits'
+          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/kmap_'//trim(x)//'.fits'
 
        End If
 
@@ -261,13 +261,13 @@ contains
     Implicit none
 
     Integer*4 :: m
-    Integer*8 :: d,i,f,j ! NUMBERS OF PIXELS CMB MAPS
-    Integer*8, allocatable, dimension(:) :: indexc 
+    Integer(kind=I8B) :: d,i,f,j ! NUMBERS OF PIXELS CMB MAPS
+    Integer(kind=I8B), allocatable, dimension(:) :: indexc 
 
-    Real*8, allocatable, dimension(:,:) :: vmap,kmap,smap,cmbmapa,cmbmapb,kmap2,kmap3,vskmask
-    Real*8, allocatable, dimension(:) :: pcmb,pcmb2
-    Real*8,dimension(0:3) :: multipoles              ! SAVES MONOPOLE AND DIPOLE OF CMB MAP 
-    Real*8,dimension(1:2) :: zbounds                 ! BOUNDS TO COMPUTE DIPOLE AND MONOPOLE
+    Real(kind=DP), allocatable, dimension(:,:) :: vmap,kmap,smap,cmbmapa,kmap2,kmap3,vskmask
+    Real(kind=DP), allocatable, dimension(:) :: pcmb,pcmb2
+    Real(kind=DP),dimension(0:DEGREE_REMOVE_DIPOLE*DEGREE_REMOVE_DIPOLE-1) :: multipoles              ! SAVES MONOPOLE AND DIPOLE OF CMB MAP 
+    Real(kind=DP),dimension(1:2) :: zbounds                 ! BOUNDS TO COMPUTE DIPOLE AND MONOPOLE
 
     Character(len=*) :: PATH_TO_CMB_MAP
     Character(len=80),dimension(1:60) :: header
@@ -280,7 +280,7 @@ contains
     computing_data = .false.
 
     allocate (kmap(0:npixC-1,1:1), smap(0:npixC-1,1:1), vmap(0:npixC-1,1:1),& 
-         cmbmapa(0:n-1,1:1), cmbmapb(0:n-1,1:1),vskmask(0:npixC-1,1:1),stat = status1)
+         cmbmapa(0:n-1,1:1), vskmask(0:npixC-1,1:1),stat = status1)
 
     call write_minimal_header(header, 'MAP', nside = nsideC, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
 
@@ -294,25 +294,27 @@ contains
 
        call input_map(PATH_TO_CMB_MAP, cmbmapa(0:n-1,1:1), n, 1) 
 
-       call remove_dipole(nsmax,cmbmapa(0:n-1,1),1,2,multipoles,zbounds,cmbmask(0:n-1,1))
+       cmbmapa = cmbmapa*1.d-6 ! CONVERSION OF UNITS IN CMB MAP: \mu K_CMB -> K_CMB AS IN PLANCK MAP
+
+       call remove_dipole(nsmax,cmbmapa(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
        cmbmapa(0:,1:1) = cmbmapa(0:,1:1)*cmbmask(0:,1:1)  ! USES MASK UT78
 
     End If
 
-    kmap(0:npixC-1,1) = miss ! INITIALIZATION OF K MAP
-    smap(0:npixC-1,1) = miss ! INITIALIZATION OF S MAP
-    vmap(0:npixC-1,1) = miss ! INITIALIZATION OF V MAP
+    kmap(0:npixC-1,1) = HPX_DBADVAL ! INITIALIZATION OF K MAP
+    smap(0:npixC-1,1) = HPX_DBADVAL ! INITIALIZATION OF S MAP
+    vmap(0:npixC-1,1) = HPX_DBADVAL ! INITIALIZATION OF V MAP
 
     Do m=0,npixC-1
 
        allocate(kmap2(0:n-1,1:1),kmap3(0:npixC-1,1:1))
 
-       kmap2 = cmbmapa
+       kmap2 = cmbmapa  ! RING ORDERING 
 
        call udgrade_ring(kmap2,nsmax,kmap3,nsideC)
 
-       kmap3(0:npixC-1,1) = miss ! INITIALIZATION OF AUXILIAR MAP
+       kmap3(0:npixC-1,1) = HPX_DBADVAL ! INITIALIZATION OF AUXILIAR MAP IN RING ORDERING
 
        kmap3(m,1) = 1.d0  ! One assigned to current cell 
 
@@ -324,7 +326,7 @@ contains
 
        Do i = 0,n-1                                                
                   
-          If ( kmap2(i,1) .eq. miss) then 
+          If ( kmap2(i,1) .eq. HPX_DBADVAL) then 
 
              continue
 
@@ -362,11 +364,11 @@ contains
  
        If (f .lt. fr) then ! MASK CURRENT CELL 
 
-          vmap(m,1) = miss 
+          vmap(m,1) = HPX_DBADVAL 
 
-          smap(m,1) = miss
+          smap(m,1) = HPX_DBADVAL
 
-          kmap(m,1) = miss
+          kmap(m,1) = HPX_DBADVAL
 
           vskmask(m,1) = 0.d0
 
@@ -438,46 +440,123 @@ contains
 
     End If
 
-    deallocate(vmap,kmap,smap,cmbmapa,cmbmapb,vskmask)
+    deallocate(vmap,kmap,smap,cmbmapa,vskmask)
 
   End Subroutine compute_variance_skewness_kurtosis_maps
 
   Subroutine compute_vsk_mean_maps()
 
+    use healpix_types
+    use fitstools, only: input_map, output_map
+    use head_fits
     use fiducial
+    use arrays
 
     Implicit none
 
     Integer*4 :: m
 
-    Character(len=4) :: x    
+    Real(kind=DP), allocatable, dimension(:,:) :: vmap,kmap,smap
 
-    allocate(v(0:npixC-1,1:number_of_cmb_simulations),s(0:npixC-1,1:number_of_cmb_simulations),&
-       k(0:npixC-1,1:number_of_cmb_simulations),vmean(0:npixC-1,1:1),smean(0:npixC-1,1:1),kmean(0:npixC-1,1:1))
+    Character(len=4) :: x    
+    Character(len=80),dimension(1:60) :: header
+
+    call write_minimal_header(header, 'MAP', nside = nsideC, ordering = ORDERING_VSK_MAPS, coordsys = SYS_COORD) ! HEADER OF V, S, K-MAPS
+
+    allocate(vsim(0:npixC-1,1:number_of_cmb_simulations),ssim(0:npixC-1,1:number_of_cmb_simulations),&
+       ksim(0:npixC-1,1:number_of_cmb_simulations),vmean(0:npixC-1,1:1),smean(0:npixC-1,1:1),kmean(0:npixC-1,1:1),&
+    vsdv(0:npixC-1,1:1),ssdv(0:npixC-1,1:1),ksdv(0:npixC-1,1:1),vmap(0:npixC-1,1:1),smap(0:npixC-1,1:1),&
+    kmap(0:npixC-1,1:1),stat = status1)
+
+    If (status1 .eq. 0) then
+
+       continue
+
+    Else
+
+       print *, 'PROBLEM WITH MEMORY IN SUBROUTINE compute_vsk_mean_maps'
+
+       stop
+
+    End If
 
     Do m=1,number_of_cmb_simulations
 
        write(x,fmt) m
 
-       call input_map('./vsk_maps/vmap_'//trim(x)//'.fits', v(0:npixC-1,m), npixC, 1)
+       call input_map('./vsk_maps/vmap_'//trim(x)//'.fits', vsim(0:npixC-1,m:m), npixC, 1)
 
-       call input_map('./vsk_maps/smap_'//trim(x)//'.fits', s(0:npixC-1,m), npixC, 1)
+       call input_map('./vsk_maps/smap_'//trim(x)//'.fits', ssim(0:npixC-1,m:m), npixC, 1)
 
-       call input_map('./vsk_maps/kmap_'//trim(x)//'.fits', k(0:npixC-1,m), npixC, 1)
+       call input_map('./vsk_maps/kmap_'//trim(x)//'.fits', ksim(0:npixC-1,m:m), npixC, 1)
 
     End Do
 
     Do m=0,npixC-1
 
-       call mean(v(m,1:number_of_cmb_simulations),vmean(m,1))
+       call mean(vsim(m,1:number_of_cmb_simulations),vmean(m,1))
 
-       call mean(s(m,1:number_of_cmb_simulations),smean(m,1))
+       call sdv(vsim(m,1:number_of_cmb_simulations),vsdv(m,1))
 
-       call mean(k(m,1:number_of_cmb_simulations),kmean(m,1))
+       call mean(ssim(m,1:number_of_cmb_simulations),smean(m,1))
+
+       call sdv(ssim(m,1:number_of_cmb_simulations),ssdv(m,1))
+
+       call mean(ksim(m,1:number_of_cmb_simulations),kmean(m,1))
+
+       call sdv(ksim(m,1:number_of_cmb_simulations),ksdv(m,1))
 
     End Do
     
-    deallocate(v,s,k)
+    call output_map(vmean,header,'./vsk_maps/vmap_mean.fits')
+
+    call output_map(smean,header,'./vsk_maps/smap_mean.fits')
+
+    call output_map(kmean,header,'./vsk_maps/kmap_mean.fits')
+
+    call output_map(vsdv,header,'./vsk_maps/vmap_sdv.fits')
+
+    call output_map(ssdv,header,'./vsk_maps/smap_sdv.fits')
+
+    call output_map(ksdv,header,'./vsk_maps/kmap_sdv.fits')
+
+    call input_map('./vsk_maps/vmap_smica.fits',vmap(0:npixC-1,1:1),npixC,1)
+
+    call input_map('./vsk_maps/smap_smica.fits',smap(0:npixC-1,1:1),npixC,1)
+
+    call input_map('./vsk_maps/kmap_smica.fits',kmap(0:npixC-1,1:1),npixC,1)
+
+    vmap(0:npixC-1,1) = vmap(0:npixC-1,1) - vmean(0:npixC-1,1) 
+
+    smap(0:npixC-1,1) = smap(0:npixC-1,1) - smean(0:npixC-1,1) 
+
+    kmap(0:npixC-1,1) = kmap(0:npixC-1,1) - kmean(0:npixC-1,1) 
+
+    call output_map(vmap,header,'./zero_mean_vsk_maps/vmap_smica.fits')
+
+    call output_map(smap,header,'./zero_mean_vsk_maps/smap_smica.fits')
+
+    call output_map(kmap,header,'./zero_mean_vsk_maps/kmap_smica.fits')
+
+    Do m=1,number_of_cmb_simulations
+
+       write(x,fmt) m
+
+       vsim(0:npixC-1,m:m) = vsim(0:npixC-1,m:m) - vmean(0:npixC-1,1:1) 
+
+       ssim(0:npixC-1,m:m) = ssim(0:npixC-1,m:m) - smean(0:npixC-1,1:1) 
+ 
+       ksim(0:npixC-1,m:m) = ksim(0:npixC-1,m:m) - kmean(0:npixC-1,1:1) 
+
+       call output_map(vsim(0:npixC-1,m:m),header,'./zero_mean_vsk_maps/vmap_'//trim(x)//'.fits')
+
+       call output_map(ssim(0:npixC-1,m:m),header,'./zero_mean_vsk_maps/smap_'//trim(x)//'.fits')
+
+       call output_map(ksim(0:npixC-1,m:m),header,'./zero_mean_vsk_maps/kmap_'//trim(x)//'.fits')
+
+    End Do
+
+    deallocate(vsim,ssim,ksim,vmap,smap,kmap)
 
   End subroutine compute_vsk_mean_maps
 
@@ -512,6 +591,22 @@ contains
     var = fgsl_stats_variance(array,1_fgsl_size_t,nsize)
 
   End Subroutine variance
+
+  Subroutine sdv(array,var)
+
+    use fgsl
+
+    Implicit none
+
+    Integer(fgsl_size_t) :: nsize 
+
+    Real(fgsl_double) :: array(:),var
+
+    nsize = size(array)
+    
+    var = fgsl_stats_sd(array,1_fgsl_size_t,nsize)
+
+  End Subroutine sdv
 
   Subroutine skewness(array,var)
 
