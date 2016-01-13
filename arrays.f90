@@ -4,7 +4,7 @@ Module arrays
     !    Integer*4,dimension(13) :: buff
     !   Integer*4,allocatable,dimension(:) :: ID
 
-    Real*8, allocatable, dimension(:,:) :: map, gmap,cmbmask,planckmap
+    Real*8, allocatable, dimension(:,:) :: map, gmap,cmbmask,planckmap,vsim,ssim,ksim,vmean,smean,kmean
 
 !!$    Character(len=6),allocatable,dimension(:) :: FieldHipp
 

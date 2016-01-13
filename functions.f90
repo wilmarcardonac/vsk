@@ -252,7 +252,7 @@ contains
 
     use healpix_types
     use udgrade_nr, only: udgrade_ring, udgrade_nest
-    use pix_tools, only: nside2npix,convert_ring2nest, convert_nest2ring
+    use pix_tools, only: nside2npix,convert_ring2nest, convert_nest2ring,remove_dipole
     use fitstools, only: getsize_fits, input_map, output_map
     use head_fits
     use fiducial
@@ -266,12 +266,16 @@ contains
 
     Real*8, allocatable, dimension(:,:) :: vmap,kmap,smap,cmbmapa,cmbmapb,kmap2,kmap3,vskmask
     Real*8, allocatable, dimension(:) :: pcmb,pcmb2
+    Real*8,dimension(0:3) :: multipoles              ! SAVES MONOPOLE AND DIPOLE OF CMB MAP 
+    Real*8,dimension(1:2) :: zbounds                 ! BOUNDS TO COMPUTE DIPOLE AND MONOPOLE
 
     Character(len=*) :: PATH_TO_CMB_MAP
     Character(len=80),dimension(1:60) :: header
     Character(len=4) :: x
 
     Logical :: exist,computing_data
+
+    zbounds(:) = 0.d0 
 
     computing_data = .false.
 
@@ -282,13 +286,15 @@ contains
 
     If (PATH_TO_CMB_MAP .eq. PATH_TO_PLANCK_CMB_MAP) then
 
-       cmbmapa(0:,1:1) = planckmap(0:,1:1)*cmbmask(0:,1:1)  ! USES MASK UT78 
+       cmbmapa(0:,1:1) = planckmap(0:,1:1)*cmbmask(0:,1:1)  ! USES MASK UT78. MONOPOLE AND DIPOLE REMOVED ALREADY
 
        computing_data = .true.
 
     Else
 
        call input_map(PATH_TO_CMB_MAP, cmbmapa(0:n-1,1:1), n, 1) 
+
+       call remove_dipole(nsmax,cmbmapa(0:n-1,1),1,2,multipoles,zbounds,cmbmask(0:n-1,1))
 
        cmbmapa(0:,1:1) = cmbmapa(0:,1:1)*cmbmask(0:,1:1)  ! USES MASK UT78
 
@@ -402,7 +408,7 @@ contains
 
     End Do
 
-    If (computing_data) then 
+    If (computing_data) then  ! VARIANCE, KURTOSIS, SKEWNESS MAPS OF UNMASKED PIXELS ARE WRITTEN TO FILES
 
        call output_map(vmap,header,'./vsk_maps/vmap_smica.fits')
 
@@ -410,7 +416,7 @@ contains
 
        call output_map(kmap,header,'./vsk_maps/kmap_smica.fits')
 
-    Else
+    Else                      ! VARIANCE, KURTOSIS, SKEWNESS MAPS OF UNMASKED PIXELS ARE WRITTEN TO FILES
 
        call output_map(vmap,header,'./vsk_maps/vmap_'//trim(x)//'.fits')
 
@@ -435,6 +441,61 @@ contains
     deallocate(vmap,kmap,smap,cmbmapa,cmbmapb,vskmask)
 
   End Subroutine compute_variance_skewness_kurtosis_maps
+
+  Subroutine compute_vsk_mean_maps()
+
+    use fiducial
+
+    Implicit none
+
+    Integer*4 :: m
+
+    Character(len=4) :: x    
+
+    allocate(v(0:npixC-1,1:number_of_cmb_simulations),s(0:npixC-1,1:number_of_cmb_simulations),&
+       k(0:npixC-1,1:number_of_cmb_simulations),vmean(0:npixC-1,1:1),smean(0:npixC-1,1:1),kmean(0:npixC-1,1:1))
+
+    Do m=1,number_of_cmb_simulations
+
+       write(x,fmt) m
+
+       call input_map('./vsk_maps/vmap_'//trim(x)//'.fits', v(0:npixC-1,m), npixC, 1)
+
+       call input_map('./vsk_maps/smap_'//trim(x)//'.fits', s(0:npixC-1,m), npixC, 1)
+
+       call input_map('./vsk_maps/kmap_'//trim(x)//'.fits', k(0:npixC-1,m), npixC, 1)
+
+    End Do
+
+    Do m=0,npixC-1
+
+       call mean(v(m,1:number_of_cmb_simulations),vmean(m,1))
+
+       call mean(s(m,1:number_of_cmb_simulations),smean(m,1))
+
+       call mean(k(m,1:number_of_cmb_simulations),kmean(m,1))
+
+    End Do
+    
+    deallocate(v,s,k)
+
+  End subroutine compute_vsk_mean_maps
+
+  Subroutine mean(array,var)
+
+    use fgsl
+
+    Implicit none
+
+    Integer(fgsl_size_t) :: nsize 
+
+    Real(fgsl_double) :: array(:),var
+
+    nsize = size(array)
+    
+    var = fgsl_stats_mean(array,1_fgsl_size_t,nsize)
+
+  End Subroutine mean
 
   Subroutine variance(array,var)
 
