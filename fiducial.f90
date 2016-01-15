@@ -13,7 +13,8 @@ Module fiducial
   Integer*4,parameter :: simul_type = 1            ! TYPE OF SIMULATION 
   Integer(kind=I4B),parameter :: nsmax = 2048              ! Nside FOR CMB MAP
   Integer*4,parameter :: nlmax = 2*nsmax           ! HIGHEST MULTIPOLE 
-  Integer*4,parameter :: number_of_cmb_simulations = 1000   ! NUMBER OF GAUSSIAN CMB MAPS 
+  Integer*4,parameter :: number_of_cmb_simulations = 1000 !2000   ! NUMBER OF GAUSSIAN CMB MAPS 
+  Integer*4,parameter :: number_of_vsk_simulations = 1000
   Integer(kind=I4B),parameter :: nsideC = 2                ! NSIDE FOR V, S, AND K MAPS
   Integer(kind=I8B) :: npixC                               ! NUMBER OF PIXELS IN V (S OR K) MAPS
   Integer(kind=I8B) :: n,c,fr                              ! NUMBER OF PIXELS CMB MAPS 

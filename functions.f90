@@ -178,7 +178,7 @@ contains
 
     End If
 
-    write(UNIT_SYNFAST_PAR_FILE,*) 'beam = ', sqrt(3.d0/Pi)*3600.d0/dble(nsideC)*3.d0
+!    write(UNIT_SYNFAST_PAR_FILE,*) 'beam = ', sqrt(3.d0/Pi)*3600.d0/dble(nsideC)*3.d0  
 
     If (iseed .eq. 0) then
 
@@ -239,6 +239,8 @@ contains
     End If
 
     write(UNIT_SYNFAST_PAR_FILE,*) 'maskfile = ', PATH_TO_VSK_MASK
+
+    write(UNIT_SYNFAST_PAR_FILE,*) 'subav = YES'
 
     write(y,fmt) nsideC 
 
@@ -454,9 +456,10 @@ contains
 
     Implicit none
 
-    Integer*4 :: m
+    Integer*4 :: m,t
 
     Real(kind=DP), allocatable, dimension(:,:) :: vmap,kmap,smap
+!    Real(kind=DP) :: fmissval 
 
     Character(len=4) :: x    
     Character(len=80),dimension(1:60) :: header
@@ -484,11 +487,11 @@ contains
 
        write(x,fmt) m
 
-       call input_map('./vsk_maps/vmap_'//trim(x)//'.fits', vsim(0:npixC-1,m:m), npixC, 1)
+       call input_map('./vsk_maps/vmap_'//trim(x)//'.fits', vsim(0:npixC-1,m:m), npixC, 1, fmissval = HPX_DBADVAL)
 
-       call input_map('./vsk_maps/smap_'//trim(x)//'.fits', ssim(0:npixC-1,m:m), npixC, 1)
+       call input_map('./vsk_maps/smap_'//trim(x)//'.fits', ssim(0:npixC-1,m:m), npixC, 1, fmissval = HPX_DBADVAL)
 
-       call input_map('./vsk_maps/kmap_'//trim(x)//'.fits', ksim(0:npixC-1,m:m), npixC, 1)
+       call input_map('./vsk_maps/kmap_'//trim(x)//'.fits', ksim(0:npixC-1,m:m), npixC, 1, fmissval = HPX_DBADVAL)
 
     End Do
 
@@ -520,17 +523,29 @@ contains
 
     call output_map(ksdv,header,'./vsk_maps/kmap_sdv.fits')
 
-    call input_map('./vsk_maps/vmap_smica.fits',vmap(0:npixC-1,1:1),npixC,1)
+    call input_map('./vsk_maps/vmap_smica.fits',vmap(0:npixC-1,1:1),npixC,1, fmissval = HPX_DBADVAL)
 
-    call input_map('./vsk_maps/smap_smica.fits',smap(0:npixC-1,1:1),npixC,1)
+    call input_map('./vsk_maps/smap_smica.fits',smap(0:npixC-1,1:1),npixC,1, fmissval = HPX_DBADVAL)
 
-    call input_map('./vsk_maps/kmap_smica.fits',kmap(0:npixC-1,1:1),npixC,1)
+    call input_map('./vsk_maps/kmap_smica.fits',kmap(0:npixC-1,1:1),npixC,1, fmissval = HPX_DBADVAL)
 
-    vmap(0:npixC-1,1) = vmap(0:npixC-1,1) - vmean(0:npixC-1,1) 
+    Do m=0,npixC-1
 
-    smap(0:npixC-1,1) = smap(0:npixC-1,1) - smean(0:npixC-1,1) 
+       If (vmap(m,1) .eq. HPX_DBADVAL) then 
 
-    kmap(0:npixC-1,1) = kmap(0:npixC-1,1) - kmean(0:npixC-1,1) 
+          continue
+
+       Else
+
+          vmap(m,1) = vmap(m,1) - vmean(m,1) 
+
+          smap(m,1) = smap(m,1) - smean(m,1) 
+
+          kmap(m,1) = kmap(m,1) - kmean(m,1) 
+
+       End If
+
+    End Do
 
     call output_map(vmap,header,'./zero_mean_vsk_maps/vmap_smica.fits')
 
@@ -542,11 +557,23 @@ contains
 
        write(x,fmt) m
 
-       vsim(0:npixC-1,m:m) = vsim(0:npixC-1,m:m) - vmean(0:npixC-1,1:1) 
+       Do t=0,npixC-1
 
-       ssim(0:npixC-1,m:m) = ssim(0:npixC-1,m:m) - smean(0:npixC-1,1:1) 
+          If (vmap(t,1) .eq. HPX_DBADVAL) then
+
+             continue 
+
+          Else
+
+             vsim(t,m:m) = vsim(t,m:m) - vmean(t,1:1) 
+
+             ssim(t,m:m) = ssim(t,m:m) - smean(t,1:1) 
  
-       ksim(0:npixC-1,m:m) = ksim(0:npixC-1,m:m) - kmean(0:npixC-1,1:1) 
+             ksim(t,m:m) = ksim(t,m:m) - kmean(t,1:1) 
+
+          End If
+
+       End Do
 
        call output_map(vsim(0:npixC-1,m:m),header,'./zero_mean_vsk_maps/vmap_'//trim(x)//'.fits')
 
