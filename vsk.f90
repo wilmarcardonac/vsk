@@ -57,7 +57,7 @@ Program vsk
 
   call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
 
-  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
+!  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
   open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
 
@@ -87,7 +87,17 @@ Program vsk
 
      write(UNIT_EXE_FILE,*) 'COMPUTING VSK MAPS. IF NEW COMPUTATION REQUIRED, THEN CLEAN FOLDER VSK_MAPS'
 
-     call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
+     inquire(file ='./vsk_maps/vmap_smica.fits',exist=exist)
+
+     If (exist) then
+     
+        continue
+
+     Else
+
+        call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
+
+     End If
 
      Do m = 1,number_of_cmb_simulations
 
@@ -123,13 +133,11 @@ Program vsk
              ( ksdv(m,1)/kmean(m,1) .gt. 1.d-2) ) then 
 
            write(UNIT_EXE_FILE,*) 'V, S, K ESTIMATORS HAVE SDV/MEAN RATIO EQUAL TO: ', vsdv(m,1)/vmean(m,1), &
-                ssdv(m,1)/smean(m,1), ksdv(m,1)/kmean(m,1) 
+                ssdv(m,1)/smean(m,1), ksdv(m,1)/kmean(m,1), 'FOR PIXEL ', m+1 
 
            write(UNIT_EXE_FILE,*) 'Nside OF CMB MAP IS ', nsmax
 
            write(UNIT_EXE_FILE,*) 'Nside OF VSK MAPS IS ', nsideC
-
-           stop
 
         Else
 
@@ -176,7 +184,7 @@ Program vsk
 
   deallocate(cmbmask,planckmap)
 
-  call system('python /figures/analyze.py')
+  call system('python ./figures/analyze.py')
 
   close(UNIT_EXE_FILE)
 

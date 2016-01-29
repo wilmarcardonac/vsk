@@ -1,11 +1,11 @@
 import numpy as np
 import pylab as py 
 
-l,vlsmica = np.loadtxt('../vsk_angular_power_spectrum/vl_smica.cl',unpack=True,usecols=[0,1])
+l,vlsmica = np.loadtxt('./vsk_angular_power_spectrum/vl_smica.cl',unpack=True,usecols=[0,1])
 
-slsmica = np.loadtxt('../vsk_angular_power_spectrum/sl_smica.cl',unpack=True,usecols=[1])
+slsmica = np.loadtxt('./vsk_angular_power_spectrum/sl_smica.cl',unpack=True,usecols=[1])
 
-klsmica = np.loadtxt('../vsk_angular_power_spectrum/kl_smica.cl',unpack=True,usecols=[1])
+klsmica = np.loadtxt('./vsk_angular_power_spectrum/kl_smica.cl',unpack=True,usecols=[1])
 
 multipoles = len(l)
 
@@ -25,11 +25,11 @@ kl = np.zeros((multipoles,number_maps))
 
 for index in range(1,number_maps+1):
 
-    vl[:,index-1] = np.loadtxt('../vsk_angular_power_spectrum/vl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
+    vl[:,index-1] = np.loadtxt('./vsk_angular_power_spectrum/vl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
 
-    sl[:,index-1] = np.loadtxt('../vsk_angular_power_spectrum/sl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
+    sl[:,index-1] = np.loadtxt('./vsk_angular_power_spectrum/sl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
 
-    kl[:,index-1] = np.loadtxt('../vsk_angular_power_spectrum/kl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
+    kl[:,index-1] = np.loadtxt('./vsk_angular_power_spectrum/kl_'+str(index).zfill(4)+'.cl',unpack=True,usecols=[1])
 
 
 #68%
@@ -183,7 +183,7 @@ for index in range(len(l)):
 
 py.figure(1)
 
-py.plot(l[1:],vlsmica[1:],label=r'SMICA*UT78',linestyle=':')
+py.plot(l[1:],vlsmica[1:],label=r'SMICA+UT78',linestyle=':')
 
 py.scatter(l[1:],vlmean[1:],label=r'simul. mean')
 
@@ -201,7 +201,7 @@ py.xticks(np.arange(multipoles))
 
 py.ylabel(r'$V_{\ell}\quad[K_{cmb}^4]$',fontsize='large')
 
-#py.ylim(1.e-7,4.e-5)
+py.ylim(1.e-25,1.e-17)
 
 py.yscale('log')
 
@@ -209,13 +209,13 @@ py.legend(loc=0)#'lower right')
 
 #py.show()
 
-py.savefig("Vl_ut78.pdf")
+py.savefig("./figures/Vl_ut78.pdf")
 
 py.close(1)
 
 py.figure(2)
 
-py.plot(l[1:],slsmica[1:],label=r'SMICA*UT78',linestyle=':')
+py.plot(l[1:],slsmica[1:],label=r'SMICA+UT78',linestyle=':')
 
 py.scatter(l[1:],slmean[1:],label=r'simul. mean')
 
@@ -233,7 +233,7 @@ py.xticks(np.arange(multipoles))
 
 py.ylabel(r'$S_{\ell}$',fontsize='large')
 
-#py.ylim(1.e-7,4.e-5)
+py.ylim(1.e-7,1.e-1)
 
 py.yscale('log')
 
@@ -241,13 +241,13 @@ py.legend(loc=0)#'lower right')
 
 #py.show()
 
-py.savefig("Sl_ut78.pdf")
+py.savefig("./figures/Sl_ut78.pdf")
 
 py.close(2)
 
 py.figure(3)
 
-py.plot(l[1:],klsmica[1:],label=r'SMICA*UT78',linestyle=':')
+py.plot(l[1:],klsmica[1:],label=r'SMICA+UT78',linestyle=':')
 
 py.scatter(l[1:],klmean[1:],label=r'simul. mean')
 
@@ -265,7 +265,7 @@ py.xticks(np.arange(multipoles))
 
 py.ylabel(r'$K_{\ell}$',fontsize='large')
 
-#py.ylim(1.e-7,4.e-5)
+py.ylim(1.e-7,1.e-1)
 
 py.yscale('log')
 
@@ -273,7 +273,7 @@ py.legend(loc=0)#'lower right')
 
 #py.show()
 
-py.savefig("Kl_ut78.pdf")
+py.savefig("./figures/Kl_ut78.pdf")
 
 py.close(3)
 
@@ -329,7 +329,7 @@ kchi2 = np.zeros(number_maps)
 for index3 in range(number_maps):
     for index1 in range(multipoles):
         for index2 in range(multipoles):
-            vchi2[index3] += vl[index1,index3]*vinvcov[index1,index2]*vl[index2,index]
+            vchi2[index3] += vl[index1,index3]*vinvcov[index1,index2]*vl[index2,index3]
             schi2[index3] += sl[index1,index3]*sinvcov[index1,index2]*sl[index2,index3]
             kchi2[index3] += kl[index1,index3]*kinvcov[index1,index2]*kl[index2,index3]
 
@@ -360,7 +360,7 @@ py.ylabel('Frequency')
 
 py.xlabel(r'$\chi^2_{V}$',fontsize='large')
 
-ymax = 600
+ymax = 800
 
 py.ylim(0,ymax)
 
@@ -368,7 +368,7 @@ py.vlines(smicavchi2,0,ymax,linestyle='dashed',label=r'SMICA*UT78')
 
 py.legend(loc=0)
 
-py.savefig("vchi2.pdf")
+py.savefig("./figures/vchi2.pdf")
 
 py.show()
 
@@ -384,7 +384,7 @@ py.vlines(smicaschi2,0,ymax,linestyle='dashed',label=r'SMICA*UT78')
 
 py.legend(loc=0)
 
-py.savefig("schi2.pdf")
+py.savefig("./figures/schi2.pdf")
 
 py.show()
 
@@ -400,7 +400,7 @@ py.vlines(smicakchi2,0,ymax,linestyle='dashed',label=r'SMICA*UT78')
 
 py.legend()
 
-py.savefig("kchi2.pdf")
+py.savefig("./figures/kchi2.pdf")
 
 py.show()
 
