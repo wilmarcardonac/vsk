@@ -4,6 +4,20 @@ Module functions
      
 contains
 
+  Subroutine compute_sevem_from_data()
+
+    use healpix_types
+    use pix_tools, only: nside2npix
+    use fitstools, only: getsize_fits, input_map, output_map
+    use arrays
+    use fiducial
+    
+    Implicit none
+
+
+
+  End Subroutine compute_sevem_from_data
+
   Subroutine generate_gaussian_cmb_map()
 
     use healpix_types
