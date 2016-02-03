@@ -77,8 +77,20 @@ Program vsk
      allocate (cmbmask(0:n-1,1:nmasks),planckmap(0:n-1,1:ncmbmaps), stat = status1)
 
      call input_map(PATH_TO_CMB_MASK, cmbmask(0:n-1,1:nmasks), n, nmasks,HPX_DBADVAL) ! READ CMB MASK IN DEFAULT PLANCK ORDERING: NESTED
-
+     
      call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
+
+     If (do_full_sky_analysis) then
+
+        write(UNIT_EXE_FILE,*) 'DOING FULL SKY ANALYSIS'
+
+        cmbmask(:,:) = 1.d0
+
+     Else
+
+        continue
+
+     End If
 
      call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
 
@@ -86,11 +98,11 @@ Program vsk
 
   End If
 
-!  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
+  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
-!  write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
+  write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
 
-!  write(UNIT_EXE_FILE,*) 'MONOPOLE AND DIPOLE GIVEN BY HEALPIX SUBROUTINE FOR PLANCK MAP ', multipoles
+  write(UNIT_EXE_FILE,*) 'MONOPOLE AND DIPOLE GIVEN BY HEALPIX SUBROUTINE FOR PLANCK MAP ', multipoles
     
   !#################################################
   ! GENERATE GAUSSIAN CMB SIMULATIONS (IF NECESSARY)
@@ -134,7 +146,8 @@ Program vsk
 
            Else
 
-              call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_FREQUENCY_MAPS//trim('HFI_SkyMap_100-field-IQU_2048_R2.02_full')//'.fits','0000')
+              call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_FREQUENCY_MAPS&
+                   //trim('HFI_SkyMap_100-field-IQU_2048_R2.02_full')//'.fits','0000')
 
            End If
 

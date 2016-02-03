@@ -32,7 +32,7 @@ Module fiducial
   Logical,parameter   :: compute_vsk_maps = .true.    ! COMPUTE V,S,K MAPS IF SET IT TRUE
   Logical,parameter   :: compute_vsk_angular_power_spectrum = .true. 
   Logical,parameter   :: compute_mean_vsk_maps = .true.
-  Logical,parameter   :: do_frequency_analysis = .true.  ! WORK WITH FREQUENCY MAPS IF SET IT TRUE, OTHERWISE WORK WITH COMPONENT SEPARATION CMB MAPS
+  Logical,parameter   :: do_frequency_analysis = .false.  ! WORK WITH FREQUENCY MAPS IF SET IT TRUE, OTHERWISE WORK WITH COMPONENT SEPARATION CMB MAPS
   Logical,parameter   :: do_full_sky_analysis = .true.   ! CMB MAPS ARE NOT MASKED IN THE ANALYSIS IF SET IT TRUE
 
   Character(len=*),parameter :: infile = './cmb_angular_power_spectrum/planck2015_lcdm_cl_v2.fits'    ! PATH TO SEED CMB ANGULAR POWER SPECTRUM
