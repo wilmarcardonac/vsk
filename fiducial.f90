@@ -20,15 +20,20 @@ Module fiducial
   Integer(kind=I8B) :: n,c,fr                              ! NUMBER OF PIXELS CMB MAPS 
   Integer(kind=i4B),parameter :: nmasks = 2                ! NUMBER OF MASKS  
   Integer(kind=I4B),parameter :: ncmbmaps = 2              ! NUMBER OF CMB MAPS IN SMICA/COMMANDER/NILC/SEVEM FITS FILES
+  Integer(kind=I4B),parameter :: ncmbmapsfrequency = 3              ! NUMBER OF CMB MAPS IN PLANCK FREQUENCY FITS FILES
   Integer*4,parameter :: UNIT_EXE_FILE = 90           ! UNIT NUMBER FOR EXECUTION INFORMATION FILE
   Integer*4,parameter :: UNIT_SYNFAST_PAR_FILE = 91   ! UNIT NUMBER FOR FILE
   Integer(kind=I4B), parameter :: RING_ORDERING = 1 
   Integer(kind=I4B), parameter :: DEGREE_REMOVE_DIPOLE = 2
+  Integer(kind=I4B), parameter :: map_frequency = 100 ! SET FREQUENCY FOR CMB MAPS TO ANALYSE. IT CAN TAKE THE FOLLOWING VALUES 
+  ! FOR PLANCK SATELLITE: 30, 40, 70, 100, 143, 217, 353, 545, 857
 
   Logical,parameter   :: do_cmb_simulations = .false. ! DO CMB SIMULATIONS IF SET IT TRUE
   Logical,parameter   :: compute_vsk_maps = .true.    ! COMPUTE V,S,K MAPS IF SET IT TRUE
   Logical,parameter   :: compute_vsk_angular_power_spectrum = .true. 
   Logical,parameter   :: compute_mean_vsk_maps = .true.
+  Logical,parameter   :: do_frequency_analysis = .true.  ! WORK WITH FREQUENCY MAPS IF SET IT TRUE, OTHERWISE WORK WITH COMPONENT SEPARATION CMB MAPS
+  Logical,parameter   :: do_full_sky_analysis = .true.   ! CMB MAPS ARE NOT MASKED IN THE ANALYSIS IF SET IT TRUE
 
   Character(len=*),parameter :: infile = './cmb_angular_power_spectrum/planck2015_lcdm_cl_v2.fits'    ! PATH TO SEED CMB ANGULAR POWER SPECTRUM
   Character(len=*),parameter :: beam_file = " '' "    ! PATH TO BEAM FILE
@@ -47,5 +52,6 @@ Module fiducial
   Character(len=*),parameter :: PATH_TO_PLANCK_CMB_MAP = './data/COM_CMB_IQU-smica-field-Int_2048_R2.01_full.fits' ! PLANCK CMB MAP TO BE USED (NESTED ORDERING)
   Character(len=*),parameter :: PATH_TO_VSK_MASK = './vsk_maps/vsk_mask.fits' ! VSK MASK TO BE USED (RING ORDERING)
   Character(len=*),parameter :: PATH_TO_VSK_SPECTRA = './vsk_angular_power_spectrum/' 
+  Character(len=*),parameter :: PATH_TO_CMB_FREQUENCY_MAPS = './cmb_maps/frequency-maps/' ! PATH TO CMB FREQUENCY MAPS (DATA AND FFP8.1 SIMULATIONS)
 
 End Module fiducial

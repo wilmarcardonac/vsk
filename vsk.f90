@@ -37,6 +37,8 @@ Program vsk
   ! INITIALIZATION OF VARIABLES
   !############################
 
+  open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
+
   zbounds(:) = 0.d0 
 
   npixC = nside2npix(nsideC)
@@ -47,39 +49,72 @@ Program vsk
 
   fr = nint(c*0.9) ! FRACTION OF PIXELS TO DETERMINE UNMASKED CELLS
 
-  allocate (cmbmask(0:n-1,1:nmasks),planckmap(0:n-1,1:ncmbmaps), stat = status1)
+  If (do_frequency_analysis) then
 
-  call input_map(PATH_TO_CMB_MASK, cmbmask(0:n-1,1:nmasks), n, nmasks,HPX_DBADVAL) ! READ CMB MASK IN DEFAULT PLANCK ORDERING: NESTED
+     allocate (cmbmask(0:n-1,1:nmasks),planckmap(0:n-1,1:ncmbmapsfrequency), stat = status1)
 
-  call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
+     call input_map(PATH_TO_CMB_MASK, cmbmask(0:n-1,1:nmasks), n, nmasks,HPX_DBADVAL) ! READ CMB MASK IN DEFAULT PLANCK ORDERING: NESTED
 
-  call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
+     call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
 
-  call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
+     If (map_frequency .eq. 100) then
+
+        call input_map(PATH_TO_CMB_FREQUENCY_MAPS//trim('HFI_SkyMap_100-field-IQU_2048_R2.02_full')//'.fits', &
+             planckmap(0:n-1,1:ncmbmapsfrequency), n, ncmbmapsfrequency,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
+
+        call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmapsfrequency))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
+
+     Else
+
+        write(UNIT_EXE_FILE,*) 'FREQUENCY ', map_frequency, ' HAS NOT BEEN YET IMPLEMENTED'
+
+        stop
+
+     End If
+
+  Else
+
+     allocate (cmbmask(0:n-1,1:nmasks),planckmap(0:n-1,1:ncmbmaps), stat = status1)
+
+     call input_map(PATH_TO_CMB_MASK, cmbmask(0:n-1,1:nmasks), n, nmasks,HPX_DBADVAL) ! READ CMB MASK IN DEFAULT PLANCK ORDERING: NESTED
+
+     call convert_nest2ring(nsmax,cmbmask(0:n-1,1:nmasks))  ! CHANGE ORDERING OF CMB MASK: NESTED->RING
+
+     call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
+
+     call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
+
+  End If
 
 !  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
-  open(UNIT_EXE_FILE,file=EXECUTION_INFORMATION)
+!  write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
 
-  write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
-
-  write(UNIT_EXE_FILE,*) 'MONOPOLE AND DIPOLE GIVEN BY HEALPIX SUBROUTINE FOR PLANCK MAP ', multipoles
+!  write(UNIT_EXE_FILE,*) 'MONOPOLE AND DIPOLE GIVEN BY HEALPIX SUBROUTINE FOR PLANCK MAP ', multipoles
     
   !#################################################
   ! GENERATE GAUSSIAN CMB SIMULATIONS (IF NECESSARY)
   !#################################################
 
-  If (do_cmb_simulations) then
+  If (do_frequency_analysis) then
+
+     write(UNIT_EXE_FILE,*) 'DOING FREQUENCY ANALYSIS USING PLANCK SIMULATIONS OF FREQUENCY ', map_frequency
      
-     write(UNIT_EXE_FILE,*) 'COMPUTING GAUSSIAN CMB SIMULATIONS. THE CODE DOES NOT OVERWRITE FILES, SO '
-
-     write(UNIT_EXE_FILE,*) 'IF SIMULATIONS ARE FOUND, ONLY THOSE NON-EXISTING WILL BE GENERATED '
-
-     call generate_gaussian_cmb_map()
-
   Else
 
-     write(UNIT_EXE_FILE,*) 'USING EXISTING GAUSSIAN CMB SIMULATIONS'
+     If (do_cmb_simulations) then
+
+        write(UNIT_EXE_FILE,*) 'COMPUTING GAUSSIAN CMB SIMULATIONS. THE CODE DOES NOT OVERWRITE FILES, SO '
+
+        write(UNIT_EXE_FILE,*) 'IF SIMULATIONS ARE FOUND, ONLY THOSE NON-EXISTING WILL BE GENERATED '
+
+        call generate_gaussian_cmb_map()
+
+     Else
+
+        write(UNIT_EXE_FILE,*) 'USING EXISTING GAUSSIAN CMB SIMULATIONS'
+
+     End If
 
   End If
 
@@ -87,37 +122,86 @@ Program vsk
 
      write(UNIT_EXE_FILE,*) 'COMPUTING VSK MAPS. IF NEW COMPUTATION REQUIRED, THEN CLEAN FOLDER VSK_MAPS'
 
-     inquire(file ='./vsk_maps/vmap_smica.fits',exist=exist)
+     If (do_frequency_analysis) then
 
-     If (exist) then
-     
-        continue
+        If (map_frequency .eq. 100) then
+
+           inquire(file ='./vsk_maps/frequency-maps/vmap_HFI_SkyMap_100-field-IQU_2048_R2.02_full.fits',exist=exist)
+
+           If (exist) then
+
+              continue
+
+           Else
+
+              call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_FREQUENCY_MAPS//trim('HFI_SkyMap_100-field-IQU_2048_R2.02_full')//'.fits','0000')
+
+           End If
+
+           Do m = 1,number_of_cmb_simulations
+
+              write(x,fmt) m-1
+
+              inquire(file ='./vsk_maps/frequency-maps/planck-simulations/100/vmap_'//trim(x)//'.fits',exist=exist)
+
+              If (exist) then
+
+                 continue
+
+              Else
+
+                 call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_FREQUENCY_MAPS//trim('planck-simulations/')//&
+                      'ffp8.1_cmb_scl_100_full_map_mc_'//trim(x)//'.fits',x)
+
+              End If
+
+           End Do
+
+        Else
+
+           write(UNIT_EXE_FILE,*) 'NEED TO IMPLEMENT MORE FREQUENCIES IN THE ANALYSIS '
+
+           stop
+
+        End If
 
      Else
 
-        call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
-
-     End If
-
-     Do m = 1,number_of_cmb_simulations
-
-        write(x,fmt) m
-
-        inquire(file ='./vsk_maps/vmap_'//trim(x)//'.fits',exist=exist)
+        inquire(file ='./vsk_maps/vmap_smica.fits',exist=exist)
 
         If (exist) then
 
            continue
-           
+
         Else
 
-           call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim(x)//'.fits',x)
+           call compute_variance_skewness_kurtosis_maps(PATH_TO_PLANCK_CMB_MAP,'0000')
 
         End If
 
-     End Do
+        Do m = 1,number_of_cmb_simulations
+
+           write(x,fmt) m
+
+           inquire(file ='./vsk_maps/vmap_'//trim(x)//'.fits',exist=exist)
+
+           If (exist) then
+
+              continue
+
+           Else
+
+              call compute_variance_skewness_kurtosis_maps(PATH_TO_CMB_MAPS//trim(x)//'.fits',x)
+
+           End If
+
+        End Do
+
+     End If
 
   Else
+
+     write(UNIT_EXE_FILE,*) 'VSK MAPS HAVE BEEN PREVIOUSLY COMPUTED '
 
      continue 
 
@@ -165,14 +249,39 @@ Program vsk
 
      call write_parameter_file_polspice(0,'K')
 
-     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-          ''//trim('vmap_smica')//'.spicerc')
+     If (do_frequency_analysis) then
 
-     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-          ''//trim('smap_smica')//'.spicerc')
+        If (map_frequency .eq. 100) then
 
-     call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-          ''//trim('kmap_smica')//'.spicerc')
+           call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+                'frequency-maps/'//trim('vmap_100')//'.spicerc')
+
+           call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+                'frequency-maps/'//trim('smap_100')//'.spicerc')
+
+           call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+                'frequency-maps/'//trim('kmap_100')//'.spicerc')
+
+        Else
+
+           write(UNIT_EXE_FILE,*) 'MUST IMPLEMENT MORE FREQUENCIES'
+
+           stop
+
+        End If
+
+     Else
+
+        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+             ''//trim('vmap_smica')//'.spicerc')
+
+        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+             ''//trim('smap_smica')//'.spicerc')
+
+        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+             ''//trim('kmap_smica')//'.spicerc')
+
+     End If
 
      call compute_vsk_angular_power_spectra()
 
@@ -184,7 +293,26 @@ Program vsk
 
   deallocate(cmbmask,planckmap)
 
-  call system('python ./figures/analyze.py')
+  If (do_frequency_analysis) then
+
+     If (map_frequency .eq. 100) then
+
+        call system('python ./figures/analyze_100.py')
+
+     Else
+     
+        write(UNIT_EXE_FILE,*) 'MUST IMPLEMENT MORE FREQUENCIES'
+
+        stop
+
+        
+     End If
+
+  Else
+
+     call system('python ./figures/analyze.py')
+
+  End If
 
   close(UNIT_EXE_FILE)
 
