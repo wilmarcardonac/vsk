@@ -370,7 +370,7 @@ py.legend(loc=0)
 
 py.savefig("./figures/vchi2.pdf")
 
-py.show()
+#py.show()
 
 shisto = py.hist(schi2,fill=False)
 
@@ -386,7 +386,7 @@ py.legend(loc=0)
 
 py.savefig("./figures/schi2.pdf")
 
-py.show()
+#py.show()
 
 khisto = py.hist(kchi2,fill=False)
 
@@ -402,7 +402,7 @@ py.legend()
 
 py.savefig("./figures/kchi2.pdf")
 
-py.show()
+#py.show()
 
 print "SMICA:lower tail probability variance, skewness, kurtosis "
 print lower_tail_probability(vchi2,smicavchi2)

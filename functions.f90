@@ -96,6 +96,298 @@ contains
 
   End subroutine write_parameter_file_synfast
 
+  Subroutine write_parameter_file_anafast(iseed,map_type)
+
+    use fiducial
+    Implicit none
+
+    Integer*4 :: iseed
+
+    Character(len=4) :: x,y
+    Character(len=1) :: map_type   ! IT CAN ONLY TAKE VALUES 'V','S',AND 'K'
+
+    If (do_frequency_analysis) then
+
+!       If (map_frequency .eq. 100) then
+
+!          write(x,fmt) iseed-1
+
+!          If (iseed .eq. 0) then
+
+!             If (map_type .eq. 'V') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('frequency-maps/vmap_100')//'.spicerc')
+
+!             Else If (map_type .eq. 'S') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('frequency-maps/smap_100')//'.spicerc')
+
+!             Else If (map_type .eq. 'K') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE//trim('frequency-maps/kmap_100')//'.spicerc')
+
+!             Else
+
+!                print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+!                stop
+
+!             End If
+
+!          Else
+
+!             If (map_type .eq. 'V') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE&
+!                     //trim('frequency-maps/planck-simulations/100/vmap')//'_'//trim(x)//'.spicerc')
+
+!             Else If (map_type .eq. 'S') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE&
+!                     //trim('frequency-maps/planck-simulations/100/smap')//'_'//trim(x)//'.spicerc')
+
+!             Else If (map_type .eq. 'K') then
+
+!                open(UNIT_SYNFAST_PAR_FILE,file=PATH_TO_POLSPICE_PARAMETER_FILE&
+!                     //trim('frequency-maps/planck-simulations/100/kmap')//'_'//trim(x)//'.spicerc')
+
+!             Else
+
+!                print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+!                stop
+
+!             End If
+
+!          End If
+
+          !    write(UNIT_SYNFAST_PAR_FILE,*) 'beam = ', sqrt(3.d0/Pi)*3600.d0/dble(nsideC)*3.d0  
+
+!          If (iseed .eq. 0) then
+
+!             If (map_type .eq. 'V') then
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/vl_100.cl')//''
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/cor_v100.cor')//''
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/vmap_smica.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/frequency-maps/vmap_100.fits'
+
+!             Else if (map_type .eq. 'S') then
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/sl_100.cl')//''
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/cor_s100.cor')//''
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/smap_smica.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/frequency-maps/smap_100.fits'
+
+!             Else
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/kl_100.cl')//''
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('frequency-maps/cor_k100.cor')//''
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/kmap_smica.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/frequency-maps/kmap_100.fits'
+
+!             End If
+
+!          Else
+
+!             If (map_type .eq. 'V') then
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/vl')//'_'//trim(x)//'.cl'
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/corv')//'_'//trim(x)//'.cor'
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/vmap_'//trim(x)//'.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', &
+!                     './vsk_maps/frequency-maps/planck-simulations/100/vmap_'//trim(x)//'.fits'
+
+!             Else if (map_type .eq. 'S') then
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/sl')//'_'//trim(x)//'.cl'
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/cors')//'_'//trim(x)//'.cor'
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/smap_'//trim(x)//'.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', &
+!                     './vsk_maps/frequency-maps/planck-simulations/100/smap_'//trim(x)//'.fits'
+
+!             Else
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/kl')//'_'//trim(x)//'.cl'
+
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA&
+!                     //trim('frequency-maps/planck-simulations/100/cork')//'_'//trim(x)//'.cor'
+
+                !          write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './zero_mean_vsk_maps/kmap_'//trim(x)//'.fits'
+!                write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', &
+!                     './vsk_maps/frequency-maps/planck-simulations/100/kmap_'//trim(x)//'.fits'
+
+!             End If
+
+!          End If
+
+!       Else
+
+!          print *, 'MUST IMPLEMENT FREQUENCY DIFFERENT TO 100 GHz'
+
+!          stop
+
+!       End If
+
+    Else
+
+       write(x,fmt) iseed
+
+       If (iseed .eq. 0) then
+
+          If (map_type .eq. 'V') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('vmap_smica')//'.par')
+
+          Else If (map_type .eq. 'S') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('smap_smica')//'.par')
+
+          Else If (map_type .eq. 'K') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('kmap_smica')//'.par')
+
+          Else
+
+             print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+             stop
+
+          End If
+
+       Else
+
+          If (map_type .eq. 'V') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('vmap')//'_'//trim(x)//'.par')
+
+          Else If (map_type .eq. 'S') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('smap')//'_'//trim(x)//'.par')
+
+          Else If (map_type .eq. 'K') then
+
+             open(UNIT_ANAFAST_PAR_FILE,file=PATH_TO_ANAFAST_PARAMETER_FILE//trim('kmap')//'_'//trim(x)//'.par')
+
+          Else
+
+             print *,'"map_type" VARIABLE CAN ONLY TAKE VALUES "V","S","K"'
+
+             stop
+
+          End If
+
+       End If
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'simul_type = 1' !sqrt(3.d0/Pi)*3600.d0/dble(nsideC)*3.d0  
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'nlmax = ', 2*nsideC
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'theta_cut_deg = 0.00'
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'regression = 0'
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'plmfile = ', plmfile
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'iter_order = 0'
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'outfile_alms = ', almsfile
+
+       write(UNIT_ANAFAST_PAR_FILE,*) 'won = 0'
+
+       If (iseed .eq. 0) then
+
+          If (map_type .eq. 'V') then
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl_smica.cl')//''
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_vsmica.cor')//''
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/vmap_smica.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_smica.fits'
+
+          Else if (map_type .eq. 'S') then
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl_smica.cl')//''
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ssmica.cor')//''
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/smap_smica.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_smica.fits'
+
+          Else
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl_smica.cl')//''
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ksmica.cor')//''
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/kmap_smica.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_smica.fits'
+
+          End If
+
+       Else
+
+          If (map_type .eq. 'V') then
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.cl'
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('corv')//'_'//trim(x)//'.cor'
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/vmap_'//trim(x)//'.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/vmap_'//trim(x)//'.fits'
+
+          Else if (map_type .eq. 'S') then
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.cl'
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cors')//'_'//trim(x)//'.cor'
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/smap_'//trim(x)//'.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/smap_'//trim(x)//'.fits'
+
+          Else
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.cl'
+
+!             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cork')//'_'//trim(x)//'.cor'
+
+             write(UNIT_ANAFAST_PAR_FILE,*) 'infile = ', './zero_mean_vsk_maps/kmap_'//trim(x)//'.fits'
+             !write(UNIT_SYNFAST_PAR_FILE,*) 'mapfile = ', './vsk_maps/kmap_'//trim(x)//'.fits'
+
+          End If
+
+       End If
+
+    End If
+
+    write(UNIT_ANAFAST_PAR_FILE,*) 'maskfile = ', PATH_TO_VSK_MASK
+
+!    write(UNIT_SYNFAST_PAR_FILE,*) 'subav = YES'
+
+    write(y,fmt) nsideC 
+
+!    write(UNIT_SYNFAST_PAR_FILE,*) 'pixelfile = ', PATH_TO_HEALPIX_DATA//trim('/pixel_window_')//'n'//trim(y)//'.fits'
+
+    close(UNIT_ANAFAST_PAR_FILE)
+
+  End subroutine write_parameter_file_anafast
+
   Subroutine compute_vsk_angular_power_spectra()
 
     use healpix_types
@@ -150,21 +442,36 @@ contains
 
           write(x,fmt) p
 
-          call write_parameter_file_polspice(p,'V')
+!          call write_parameter_file_polspice(p,'V')
 
-          call write_parameter_file_polspice(p,'S')
+!          call write_parameter_file_polspice(p,'S')
 
-          call write_parameter_file_polspice(p,'K')
+!          call write_parameter_file_polspice(p,'K')
 
-          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-               ''//trim('vmap')//'_'//trim(x)//'.spicerc')
+          call write_parameter_file_anafast(p,'V')
 
-          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-               ''//trim('smap')//'_'//trim(x)//'.spicerc')
+          call write_parameter_file_anafast(p,'S')
+
+          call write_parameter_file_anafast(p,'K')
+
+!          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!               ''//trim('vmap')//'_'//trim(x)//'.spicerc')
+
+!          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!               ''//trim('smap')//'_'//trim(x)//'.spicerc')
+
+!          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!               ''//trim('kmap')//'_'//trim(x)//'.spicerc')
+
+          call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+               ''//trim('vmap')//'_'//trim(x)//'.par')
+
+          call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+               ''//trim('smap')//'_'//trim(x)//'.par')
 
 
-          call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-               ''//trim('kmap')//'_'//trim(x)//'.spicerc')
+          call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+               ''//trim('kmap')//'_'//trim(x)//'.par')
 
        End Do
 
@@ -520,7 +827,7 @@ contains
 
        If (PATH_TO_CMB_MAP .eq. PATH_TO_PLANCK_CMB_MAP) then
 
-          cmbmapa(0:,1:1) = planckmap(0:,1:1)*cmbmask(0:,1:1)  ! USES MASK UT78. MONOPOLE AND DIPOLE REMOVED ALREADY
+          cmbmapa(0:,1:1) = planckmap(0:,5:5)*cmbmask(0:,1:1)  ! USES MASK UT78. MONOPOLE AND DIPOLE REMOVED ALREADY
 
           computing_data = .true.
 
@@ -528,7 +835,7 @@ contains
 
           call input_map(PATH_TO_CMB_MAP, cmbmapa(0:n-1,1:1), n, 1) 
 
-          cmbmapa = cmbmapa*1.d-6 ! CONVERSION OF UNITS IN CMB MAP: \mu K_CMB -> K_CMB AS IN PLANCK MAP
+          cmbmapa = cmbmapa!*1.d-6 ! CONVERSION OF UNITS IN CMB MAP: \mu K_CMB -> K_CMB AS IN PLANCK MAP
 
           call remove_dipole(nsmax,cmbmapa(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,&
                zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))

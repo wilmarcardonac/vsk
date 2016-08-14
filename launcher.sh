@@ -6,7 +6,6 @@
 #SBATCH --mail-user=Wilmar.Cardona@unige.ch
 #SBATCH --mail-type=ALL
 #SBATCH --partition=dpt
-#SBATCH --clusters=baobab
 #SBATCH --output=slurm-%J.out
 
 

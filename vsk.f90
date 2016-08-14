@@ -92,13 +92,13 @@ Program vsk
 
      End If
 
-     call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB
+     call input_map(PATH_TO_PLANCK_CMB_MAP, planckmap(0:n-1,1:ncmbmaps), n, ncmbmaps,HPX_DBADVAL) ! READ PLANCK CMB MAP IN DEFAULT PLANCK ORDERING: NESTED. UNITS: K_CMB 2015 release, uK_CMB 2013 release
 
      call convert_nest2ring(nsmax,planckmap(0:n-1,1:ncmbmaps))  ! CHANGE ORDERING OF CMB MAP: NESTED->RING
 
   End If
 
-  call remove_dipole(nsmax,planckmap(0:n-1,1),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
+  call remove_dipole(nsmax,planckmap(0:n-1,5),RING_ORDERING,DEGREE_REMOVE_DIPOLE,multipoles,zbounds,HPX_DBADVAL,cmbmask(0:n-1,1))
 
   write(UNIT_EXE_FILE,*) 'CMB MASK READ. MONOPOLE AND DIPOLE REMOVED FROM PLANCK CMB MAP'
 
@@ -252,15 +252,21 @@ Program vsk
 
   If (compute_vsk_angular_power_spectrum) then
 
-     write(UNIT_EXE_FILE,*) 'NOT USING BEAM TO SMOOTH V, S, K MAPS. IF BEAM WANTED, UNCOMMENT CORRESPONDING LINE IN  '
+!     write(UNIT_EXE_FILE,*) 'NOT USING BEAM TO SMOOTH V, S, K MAPS. IF BEAM WANTED, UNCOMMENT CORRESPONDING LINE IN  '
 
-     write(UNIT_EXE_FILE,*) 'SUBROUTINE "write_parameter_file_polspice" '
+!     write(UNIT_EXE_FILE,*) 'SUBROUTINE "write_parameter_file_polspice" '
 
-     call write_parameter_file_polspice(0,'V')
+!     call write_parameter_file_polspice(0,'V')
 
-     call write_parameter_file_polspice(0,'S')
+!     call write_parameter_file_polspice(0,'S')
 
-     call write_parameter_file_polspice(0,'K')
+!     call write_parameter_file_polspice(0,'K')
+
+     call write_parameter_file_anafast(0,'V')
+
+     call write_parameter_file_anafast(0,'S')
+
+     call write_parameter_file_anafast(0,'K')
 
      If (do_frequency_analysis) then
 
@@ -285,14 +291,23 @@ Program vsk
 
      Else
 
-        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-             ''//trim('vmap_smica')//'.spicerc')
+!        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!             ''//trim('vmap_smica')//'.spicerc')
 
-        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-             ''//trim('smap_smica')//'.spicerc')
+!        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!             ''//trim('smap_smica')//'.spicerc')
 
-        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
-             ''//trim('kmap_smica')//'.spicerc')
+!        call system('./PolSpice_v03-01-06/src/spice -optinfile '//trim(PATH_TO_POLSPICE_PARAMETER_FILE)//&
+!             ''//trim('kmap_smica')//'.spicerc')
+
+        call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+             ''//trim('vmap_smica')//'.par')
+
+        call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+             ''//trim('smap_smica')//'.par')
+
+        call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
+             ''//trim('kmap_smica')//'.par')
 
      End If
 
