@@ -10,6 +10,7 @@ Module arrays
 
   Real(kind=DP), allocatable, dimension(:,:) :: map, gmap,cmbmask,planckmap,vsim,ssim,ksim,vmean,smean,kmean
   Real(kind=DP), allocatable, dimension(:,:) :: vsdv,ssdv,ksdv
+  Real(kind=DP), allocatable, dimension(:,:) :: kl, sl, vl
 
 !!$    Character(len=6),allocatable,dimension(:) :: FieldHipp
 

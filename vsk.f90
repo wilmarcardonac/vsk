@@ -7,7 +7,7 @@ Program vsk
   use healpix_types
   use udgrade_nr, only: udgrade_ring, udgrade_nest
   use pix_tools, only: nside2npix,convert_ring2nest, convert_nest2ring, remove_dipole
-  use fitstools, only: getsize_fits, input_map, output_map
+  use fitstools, only: getsize_fits, input_map, output_map, fits2cl
   use head_fits
   use fiducial
   use arrays
@@ -29,7 +29,7 @@ Program vsk
 
   Character(len=4) :: x
 
-!  Character(len=80),dimension(1:60) :: header
+  Character(len=80),dimension(1:60) :: header
 
 !  Real(kind=DP), dimension(0:2048-1) :: maptest
 
@@ -308,6 +308,41 @@ Program vsk
 
         call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
              ''//trim('kmap_smica')//'.par')
+
+        allocate (kl(0:nlmaxC,1:1), sl(0:nlmaxC,1:1), vl(0:nlmaxC,1:1), stat = status1)
+
+        call fits2cl(PATH_TO_VSK_SPECTRA//trim('kl_smica.fits')//'',kl,nlmaxC,1,header)
+
+        call fits2cl(PATH_TO_VSK_SPECTRA//trim('sl_smica.fits')//'',sl,nlmaxC,1,header)
+
+        call fits2cl(PATH_TO_VSK_SPECTRA//trim('vl_smica.fits')//'',vl,nlmaxC,1,header)
+
+        open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('vl_smica.txt')//'')
+
+        Do m=0,nlmaxC
+           write(UNIT_ANAFAST_PAR_FILE,89) m, vl(m,1)
+           89 Format(I4, E20.10)
+        End Do
+
+        close(UNIT_ANAFAST_PAR_FILE)
+
+        open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('kl_smica.txt')//'')
+
+        Do m=0,nlmaxC
+           write(UNIT_ANAFAST_PAR_FILE,89) m, kl(m,1)
+        End Do
+
+        close(UNIT_ANAFAST_PAR_FILE)
+
+        open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('sl_smica.txt')//'')
+
+        Do m=0,nlmaxC
+           write(UNIT_ANAFAST_PAR_FILE,89) m, sl(m,1)
+        End Do
+
+        close(UNIT_ANAFAST_PAR_FILE)
+
+        deallocate (kl,sl,vl)
 
      End If
 

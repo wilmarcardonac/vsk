@@ -314,7 +314,7 @@ contains
 
           If (map_type .eq. 'V') then
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl_smica.cl')//''
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('vl_smica.fits')//''
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_vsmica.cor')//''
 
@@ -323,7 +323,7 @@ contains
 
           Else if (map_type .eq. 'S') then
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl_smica.cl')//''
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('sl_smica.fits')//''
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ssmica.cor')//''
 
@@ -332,7 +332,7 @@ contains
 
           Else
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl_smica.cl')//''
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('kl_smica.fits')//''
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cor_ksmica.cor')//''
 
@@ -345,7 +345,7 @@ contains
 
           If (map_type .eq. 'V') then
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.cl'
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.fits'
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('corv')//'_'//trim(x)//'.cor'
 
@@ -354,7 +354,7 @@ contains
 
           Else if (map_type .eq. 'S') then
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.cl'
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.fits'
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cors')//'_'//trim(x)//'.cor'
 
@@ -363,7 +363,7 @@ contains
 
           Else
 
-!             write(UNIT_SYNFAST_PAR_FILE,*) 'clfile = ', PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.cl'
+             write(UNIT_ANAFAST_PAR_FILE,*) 'outfile = ', PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.fits'
 
 !             write(UNIT_SYNFAST_PAR_FILE,*) 'corfile = ', PATH_TO_VSK_SPECTRA//trim('cork')//'_'//trim(x)//'.cor'
 
@@ -392,15 +392,17 @@ contains
 
     use healpix_types
     use pix_tools, only: nside2npix
-    use fitstools, only: getsize_fits, input_map, output_map
+    use fitstools, only: getsize_fits, input_map, output_map, fits2cl
     use arrays
     use fiducial
 
     Implicit none
 
-    Integer*4 :: p
+    Integer*4 :: p,m
 
     Character(len=4) :: x
+
+    Character(len=80),dimension(1:60) :: header
 
     If (do_frequency_analysis) then 
 
@@ -472,6 +474,41 @@ contains
 
           call system('anafast -d '//trim(PATH_TO_ANAFAST_PARAMETER_FILE)//&
                ''//trim('kmap')//'_'//trim(x)//'.par')
+
+          allocate (kl(0:nlmaxC,1:1), sl(0:nlmaxC,1:1), vl(0:nlmaxC,1:1), stat = status1)
+
+          call fits2cl(PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.fits',kl,nlmaxC,1,header)
+
+          call fits2cl(PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.fits',sl,nlmaxC,1,header)
+
+          call fits2cl(PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.fits',vl,nlmaxC,1,header)
+
+          open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('vl')//'_'//trim(x)//'.txt')
+
+          Do m=0,nlmaxC
+             write(UNIT_ANAFAST_PAR_FILE,89) m, vl(m,1)
+89           Format(I4, E20.10)
+          End Do
+
+          close(UNIT_ANAFAST_PAR_FILE)
+
+          open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('kl')//'_'//trim(x)//'.txt')
+
+          Do m=0,nlmaxC
+             write(UNIT_ANAFAST_PAR_FILE,89) m, kl(m,1)
+          End Do
+
+          close(UNIT_ANAFAST_PAR_FILE)
+
+          open(UNIT_ANAFAST_PAR_FILE,file= PATH_TO_VSK_SPECTRA//trim('sl')//'_'//trim(x)//'.txt')
+
+          Do m=0,nlmaxC
+             write(UNIT_ANAFAST_PAR_FILE,89) m, sl(m,1)
+          End Do
+
+          close(UNIT_ANAFAST_PAR_FILE)
+
+          deallocate (kl,sl,vl)
 
        End Do
 
